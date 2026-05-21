@@ -1,65 +1,76 @@
-import Image from "next/image";
+"use client";
 
-export default function Home() {
+import AnimatedColumns from "@/components/animated-columns";
+import CoffeeCupGroup from "@/components/coffee-cup-group";
+import WaitlistSection from "@/components/waitlist-section";
+import { Button } from "@/components/ui/button";
+import { motion } from "framer-motion";
+import {
+  selectIsWaitlistOpen,
+  useWaitlistStore,
+} from "@/stores/waitlist-store";
+import { ArrowRightIcon } from "lucide-react";
+
+const panelTransition = { duration: 0.5, ease: [0.32, 0.72, 0, 1] as const };
+
+export default function HomePage() {
+  const openWaitlist = useWaitlistStore((store) => store.open);
+  const isWaitlistOpen = useWaitlistStore(selectIsWaitlistOpen);
+
   return (
-    <div className="flex flex-col flex-1 items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex flex-1 w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.tsx file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
+    <div className="relative h-full w-full overflow-hidden">
+      <motion.div
+        className="relative flex w-full items-center justify-center overflow-hidden bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]"
+        animate={{ height: isWaitlistOpen ? "75%" : "100%" }}
+        transition={panelTransition}
+      >
+        <AnimatedColumns />
+        <CoffeeCupGroup />
+
+        <div className="relative z-10 max-w-2xl translate-y-[-160%] px-6 flex flex-col items-center">
+          <p className="text-5xl font-medium font-bodoni-moda">Gratitude</p>
+          <p className="mt-2 text-center font-light text-gray-500">
+            build loyalty that feel rewarding, modern and easy to use - giving your customers one seamless place to stay connected with the brands they love.
           </p>
+          <div className="mt-4 flex items-center gap-2">
+            <Button
+              type="button"
+              className="w-fit cursor-pointer bg-violet-300 text-black hover:bg-gray-900 hover:text-white"
+              onClick={() => openWaitlist("brand")}
+            >
+              <span className="inline-flex items-center gap-1.5 group-hover/button:hidden">
+                You&apos;re a brand?
+              </span>
+              <span className="hidden items-center gap-1.5 group-hover/button:inline-flex">
+                Partner with Gratitude
+                <ArrowRightIcon className="size-4 shrink-0" />
+              </span>
+            </Button>
+            <Button 
+              className="w-fit cursor-pointer bg-orange-300 text-black hover:bg-gray-900 hover:text-white" 
+              onClick={() => openWaitlist("consumer")}
+            >
+              <span className="inline-flex items-center gap-1.5 group-hover/button:hidden">
+                You&apos;re a consumer?
+              </span>
+              <span className="hidden items-center gap-1.5 group-hover/button:inline-flex">
+                Get early access
+                <ArrowRightIcon className="size-4 shrink-0" />
+              </span>
+            </Button>
+          </div>
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
+      </motion.div>
+
+      <motion.section
+        aria-hidden={!isWaitlistOpen}
+        className="absolute inset-x-0 bottom-0 z-20 h-1/2 bg-white px-6 py-5 rounded-t-xl shadow-[0_-8px_30px_rgba(0,0,0,0.08)]"
+        initial={false}
+        animate={{ y: isWaitlistOpen ? "0%" : "100%" }}
+        transition={panelTransition}
+      >
+        <WaitlistSection />
+      </motion.section>
     </div>
   );
 }

@@ -1,0 +1,21 @@
+<svg
+  xmlns="http://www.w3.org/2000/svg"
+  viewBox="0 0 100 50"
+  preserveAspectRatio="none"
+>
+  <!-- Visible area -->
+  <rect width="100" height="50" fill="white" />
+
+  <!-- Hidden cutout -->
+  <path
+    d="
+      M 0 50
+      A 50 50 0 0 1 100 50
+      L 100 0
+      L 0 0
+      Z
+    "
+    fill="black"
+    fill-opacity="0"
+  />
+</svg>
