@@ -44,20 +44,21 @@ export default function WaitlistSection() {
   const activeAudience = isOpen ? (audience ?? "brand") : audience;
 
   return (
-    <div className="relative flex h-full flex-col">
+    <div className="relative flex h-full min-h-0 flex-col">
       <Button
         type="button"
         variant="ghost"
         size="icon-sm"
-        className="absolute top-0 right-0 shrink-0"
+        className="absolute top-0 right-0 z-10 shrink-0"
         onClick={close}
         aria-label="Close waitlist"
       >
         <XIcon className="size-4" />
       </Button>
 
-      <div className="flex w-[90%] items-start justify-between gap-4">
-        <div className="flex w-1/3 flex-col pr-30">
+      <div className="min-h-0 flex-1 overflow-y-auto overscroll-contain md:overflow-visible">
+        <div className="flex w-full flex-col gap-8 pt-10 md:w-[90%] md:flex-row md:items-start md:justify-between md:gap-4 md:pt-0">
+        <div className="flex w-full flex-col md:w-1/3 md:pr-30">
           <div className="flex items-center gap-2">
             <Badge
               role="button"
@@ -113,7 +114,10 @@ export default function WaitlistSection() {
           )}
         </div>
 
-        <WaitlistForm />
+        <div className="w-full pb-4 md:flex-1 md:pb-0">
+          <WaitlistForm />
+        </div>
+        </div>
       </div>
     </div>
   );

@@ -8,14 +8,34 @@ import {
   useTransform,
   type MotionValue,
 } from "framer-motion";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 
-const COLUMN_COUNT = 12;
 const DUPLICATE_SETS = 2;
+const MD_BREAKPOINT_PX = 768;
 
-function getColumnHeights(columns: number): number[] {
-  const side = 60;
-  const middle = 40;
+type ColumnConfig = {
+  columnCount: number;
+  sideHeight: number;
+  middleHeight: number;
+};
+
+const DESKTOP_CONFIG: ColumnConfig = {
+  columnCount: 12,
+  sideHeight: 60,
+  middleHeight: 40,
+};
+
+const MOBILE_CONFIG: ColumnConfig = {
+  columnCount: 6,
+  sideHeight: 50,
+  middleHeight: 40,
+};
+
+function getColumnHeights(
+  columns: number,
+  side: number,
+  middle: number,
+): number[] {
   const midStart = columns / 2 - 1;
   const midEnd = columns / 2;
   const heights: number[] = [];
@@ -33,10 +53,12 @@ function getColumnHeights(columns: number): number[] {
   return heights;
 }
 
-const slotHeights = getColumnHeights(COLUMN_COUNT);
-
-function interpolateHeight(slotIndex: number): number {
-  const clamped = Math.max(0, Math.min(COLUMN_COUNT - 1, slotIndex));
+function interpolateHeight(
+  slotIndex: number,
+  columnCount: number,
+  slotHeights: number[],
+): number {
+  const clamped = Math.max(0, Math.min(columnCount - 1, slotIndex));
   const lower = Math.floor(clamped);
   const upper = Math.ceil(clamped);
   const t = clamped - lower;
@@ -50,6 +72,8 @@ type ColumnProps = {
   gap: number;
   paddingX: number;
   containerWidth: number;
+  columnCount: number;
+  slotHeights: number[];
 };
 
 function Column({
@@ -59,12 +83,14 @@ function Column({
   gap,
   paddingX,
   containerWidth,
+  columnCount,
+  slotHeights,
 }: ColumnProps) {
   const height = useTransform(x, (translateX) => {
     const columnCenter =
       paddingX + index * (slotWidth + gap) + slotWidth / 2 + translateX;
-    const slotIndex = (columnCenter / containerWidth) * (COLUMN_COUNT - 1);
-    return interpolateHeight(slotIndex);
+    const slotIndex = (columnCenter / containerWidth) * (columnCount - 1);
+    return interpolateHeight(slotIndex, columnCount, slotHeights);
   });
 
   const heightStyle = useMotionTemplate`${height}%`;
@@ -77,9 +103,37 @@ function Column({
   );
 }
 
+function useColumnConfig() {
+  const [config, setConfig] = useState<ColumnConfig>(DESKTOP_CONFIG);
+
+  useEffect(() => {
+    const mediaQuery = window.matchMedia(`(min-width: ${MD_BREAKPOINT_PX}px)`);
+
+    const updateConfig = () => {
+      setConfig(mediaQuery.matches ? DESKTOP_CONFIG : MOBILE_CONFIG);
+    };
+
+    updateConfig();
+    mediaQuery.addEventListener("change", updateConfig);
+    return () => mediaQuery.removeEventListener("change", updateConfig);
+  }, []);
+
+  return config;
+}
+
 export default function AnimatedColumns() {
   const containerRef = useRef<HTMLDivElement>(null);
   const x = useMotionValue(0);
+  const config = useColumnConfig();
+  const slotHeights = useMemo(
+    () =>
+      getColumnHeights(
+        config.columnCount,
+        config.sideHeight,
+        config.middleHeight,
+      ),
+    [config],
+  );
   const [metrics, setMetrics] = useState({
     containerWidth: 0,
     slotWidth: 0,
@@ -101,8 +155,8 @@ export default function AnimatedColumns() {
         (containerWidth -
           paddingLeft -
           paddingRight -
-          gap * (COLUMN_COUNT - 1)) /
-        COLUMN_COUNT;
+          gap * (config.columnCount - 1)) /
+        config.columnCount;
 
       setMetrics({
         containerWidth,
@@ -116,13 +170,14 @@ export default function AnimatedColumns() {
     const observer = new ResizeObserver(measure);
     observer.observe(container);
     return () => observer.disconnect();
-  }, []);
+  }, [config.columnCount]);
 
   useEffect(() => {
     const { slotWidth, gap } = metrics;
     if (slotWidth <= 0) return;
 
-    const loopDistance = COLUMN_COUNT * (slotWidth + gap);
+    x.set(0);
+    const loopDistance = config.columnCount * (slotWidth + gap);
 
     const controls = animate(x, -loopDistance, {
       repeat: Number.POSITIVE_INFINITY,
@@ -131,9 +186,9 @@ export default function AnimatedColumns() {
     });
 
     return () => controls.stop();
-  }, [metrics, x]);
+  }, [metrics, x, config.columnCount]);
 
-  const totalColumns = COLUMN_COUNT * DUPLICATE_SETS;
+  const totalColumns = config.columnCount * DUPLICATE_SETS;
 
   return (
     <div
@@ -143,13 +198,15 @@ export default function AnimatedColumns() {
       <motion.div className="flex h-full items-end gap-4" style={{ x }}>
         {Array.from({ length: totalColumns }, (_, index) => (
           <Column
-            key={index}
+            key={`${config.columnCount}-${index}`}
             index={index}
             x={x}
             slotWidth={metrics.slotWidth}
             gap={metrics.gap}
             paddingX={metrics.paddingX}
             containerWidth={metrics.containerWidth}
+            columnCount={config.columnCount}
+            slotHeights={slotHeights}
           />
         ))}
       </motion.div>
