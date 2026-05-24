@@ -1,12 +1,33 @@
 "use client";
 
-import { ArrowRightIcon } from "lucide-react";
+import { ArrowRightIcon, ChartLine, Proportions, Users } from "lucide-react";
 import AnimatedColumns from "@/components/animated-columns";
 import CoffeeCupGroup from "@/components/coffee-cup-group";
-import { Button } from "@/components/ui/button";
-import { useWaitlistStore, selectWaitlistAudience } from "@/stores/waitlist-store";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import {
+  selectWaitlistAudience,
+  useWaitlistStore,
+} from "@/stores/waitlist-store";
+
+const HOW_IT_WORKS = [
+  {
+    icon: Users,
+    title: "Customers join once",
+    description: "One place to manage rewards across brands.",
+  },
+  {
+    icon: Proportions,
+    title: "Brands launch campaigns",
+    description: "Points, tiers, referrals, perks, streaks and more.",
+  },
+  {
+    icon: ChartLine,
+    title: "Engagement grows naturally",
+    description: "Better retention without fragmented loyalty systems.",
+  },
+];
 
 export default function HomePage() {
   const audience = useWaitlistStore(selectWaitlistAudience);
@@ -38,9 +59,7 @@ export default function HomePage() {
                 <ArrowRightIcon className="size-4 shrink-0" />
               </span>
             </Button>
-            <Button
-              className="w-fit cursor-pointer bg-orange-300 text-black hover:bg-gray-900 hover:text-white"
-            >
+            <Button className="w-fit cursor-pointer bg-orange-300 text-black hover:bg-gray-900 hover:text-white">
               <span className="inline-flex items-center gap-1.5 group-hover/button:hidden">
                 You&apos;re a consumer?
               </span>
@@ -53,15 +72,17 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="w-full p-8 bg-white flex flex-col items-center">
-        <div className="flex items-center gap-2">
+      <div className="w-full p-16 bg-white flex flex-col items-center">
+        {/* <div className="flex items-center gap-2">
           <Badge
             role="button"
             tabIndex={0}
             variant={audience === "brand" ? "default" : "outline"}
             className={cn(
               "cursor-pointer text-sm font-light p-3",
-              audience === "brand" ? "bg-violet-300 text-black" : "border-violet-300 text-black",
+              audience === "brand"
+                ? "bg-violet-300 text-black"
+                : "border-violet-300 text-black",
             )}
             onClick={() => setAudience("brand")}
             onKeyDown={(event) => {
@@ -79,7 +100,9 @@ export default function HomePage() {
             variant={audience === "consumer" ? "default" : "outline"}
             className={cn(
               "cursor-pointer text-sm font-light p-3",
-              audience === "consumer" ? "bg-orange-300 text-black" : "border-orange-300 text-black",
+              audience === "consumer"
+                ? "bg-orange-300 text-black"
+                : "border-orange-300 text-black",
             )}
             onClick={() => setAudience("consumer")}
             onKeyDown={(event) => {
@@ -91,14 +114,44 @@ export default function HomePage() {
           >
             Consumer
           </Badge>
-        </div>
-        <div className="mt-6 flex flex-col items-center">
+        </div> */}
+        <div className="flex flex-col items-center">
           <p className="text-3xl font-medium font-bodoni-moda">How it works</p>
-          <p className="mt-2 text-center max-w-6xl font-light text-gray-500">Launching a modern, simple, and beautiful loyalty program should be easy for businesses and enjoyable for customers. Gratitude makes that possible—giving your brand a central place to connect with customers and turn loyalty into something they will actually want to use.</p>
+          <p className="mt-2 text-center max-w-6xl font-light text-gray-500">
+            Launching a modern, simple, and beautiful loyalty program should be
+            easy for businesses and enjoyable for customers. Gratitude makes
+            that possible—giving your brand a central place to connect with
+            customers and turn loyalty into something they will actually want to
+            use.
+          </p>
+
+          <div className="grid grid-cols-3 gap-20 mt-8">
+            {/* 
+              TODO: Create custom icons for each feature.
+              Make it look like a stepper. Add connecting lines.
+              Try adding numbers instead of icons.
+            */}
+            {HOW_IT_WORKS.map(({ icon: Icon, title, description }) => {
+              return (
+                <div
+                  key={title}
+                  className="p-6 flex flex-col items-center"
+                >
+                  <div className="w-12 aspect-square rounded-lg bg-violet-300 flex items-center justify-center">
+                    <Icon />
+                  </div>
+                  <p className="mt-6 text-xl font-medium font-bodoni-moda">
+                    {title}
+                  </p>
+                  <p className="text-sm font-normal text-gray-500">{description}</p>
+                </div>
+              );
+            })}
+          </div>
         </div>
       </div>
 
-      <div className="w-full h-56 bg-white">
+      <div className="w-full h-56 bg-white border">
         <p>Built for</p>
       </div>
 
