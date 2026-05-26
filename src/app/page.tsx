@@ -3,9 +3,7 @@
 import { ArrowRightIcon, ChartLine, Proportions, Users } from "lucide-react";
 import AnimatedColumns from "@/components/animated-columns";
 import CoffeeCupGroup from "@/components/coffee-cup-group";
-import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { cn } from "@/lib/utils";
 import {
   selectWaitlistAudience,
   useWaitlistStore,
@@ -30,11 +28,12 @@ const HOW_IT_WORKS = [
 ];
 
 export default function HomePage() {
-  const audience = useWaitlistStore(selectWaitlistAudience);
-  const setAudience = useWaitlistStore((store) => store.setAudience);
+  const _audience = useWaitlistStore(selectWaitlistAudience);
+  const _setAudience = useWaitlistStore((store) => store.setAudience);
 
   return (
     <div className="relative w-full overflow-x-hidden">
+      {/* Hero section */}
       <div className="relative flex w-full h-screen items-center justify-center overflow-hidden bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
         <AnimatedColumns />
         <CoffeeCupGroup />
@@ -72,6 +71,7 @@ export default function HomePage() {
         </div>
       </div>
 
+      {/* How it works section */}
       <div className="w-full p-16 bg-white flex flex-col items-center">
         {/* <div className="flex items-center gap-2">
           <Badge
@@ -133,17 +133,16 @@ export default function HomePage() {
             */}
             {HOW_IT_WORKS.map(({ icon: Icon, title, description }) => {
               return (
-                <div
-                  key={title}
-                  className="p-6 flex flex-col items-center"
-                >
+                <div key={title} className="p-6 flex flex-col items-center">
                   <div className="w-12 aspect-square rounded-lg bg-violet-300 flex items-center justify-center">
                     <Icon />
                   </div>
                   <p className="mt-6 text-xl font-medium font-bodoni-moda">
                     {title}
                   </p>
-                  <p className="text-sm font-normal text-gray-500">{description}</p>
+                  <p className="text-sm font-normal text-gray-500">
+                    {description}
+                  </p>
                 </div>
               );
             })}
@@ -151,28 +150,65 @@ export default function HomePage() {
         </div>
       </div>
 
-      <div className="w-full h-56 bg-white border">
-        <p>Built for</p>
+      {/* Built for section */}
+      <div className="w-full bg-white min-h-1/2 flex border">
+        <div className="w-[55%] p-16 rounded-r-lg shadow-sm bg-[linear-gradient(180deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff_10%,#ddd6fe_100%)] bg-size-[100%_2px,100%_100%]">
+          <p className="text-3xl font-medium font-bodoni-moda">
+            Built for Brands
+          </p>
+          <ul className="list-disc">
+            <li className="text-sm">Launch loyalty campaigns fast</li>
+            <li className="text-sm">Understand customer behaviour</li>
+            <li className="text-sm">Increase retention and repeat purchases</li>
+          </ul>
+        </div>
+        <div className="flex-1 p-16 bg-[linear-gradient(180deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff_10%,#fed7aa_100%)] bg-size-[100%_2px,100%_100%]">
+          <p className="text-3xl font-medium font-bodoni-moda">
+            Built for Clients
+          </p>
+          <ul className="list-disc">
+            <li className="text-sm">Keep rewards in one place</li>
+            <li className="text-sm">Discover perks across brands</li>
+            <li className="text-sm">Earn rewards without friction</li>
+          </ul>
+        </div>
       </div>
 
-      <div className="w-full h-56 bg-white">
-        <p>What you can create</p>
+      {/* What you can create section */}
+      <div className="w-full p-16 bg-white flex flex-col items-center">
+        <p className="text-3xl font-medium font-bodoni-moda">Create with Gratitude</p>
+
+        <div className="mt-8 w-5xl grid grid-cols-3 gap-4">
+          <div className="border p-4 py-8 flex items-center justify-center rounded-lg">Points & Rewards</div>
+          <div className="border p-4 py-8 flex items-center justify-center rounded-lg col-span-2">Tier Memberships</div>
+          <div className="border p-4 py-8 flex items-center justify-center rounded-lg col-span-2">Referral Campaign</div>
+          <div className="border p-4 py-8 flex items-center justify-center rounded-lg">Digital Perks</div>
+          <div className="border p-4 py-8 flex items-center justify-center rounded-lg">Cashback & Credits</div>
+          <div className="border p-4 py-8 flex items-center justify-center rounded-lg">Streaks & Challenges</div>
+          <div className="border p-4 py-8 flex items-center justify-center rounded-lg">Gift Cards</div>
+        </div>
       </div>
 
-      <div className="w-full h-56 bg-white">
-        <p>Why now</p>
+      {/* Why now section */}
+      <div className="w-full p-16 flex flex-col items-center bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
+        <p className="text-center max-w-3xl text-xl text-gray-700">Loyalty programs haven’t evolved with modern digital commerce.
+          Gratitude brings rewards, engagement and retention into one connected experience.</p>
       </div>
 
+      {/* Social Proof section */}
       <div className="w-full h-56 bg-white">
         <p>Social Proof</p>
       </div>
 
+      {/* Waitlist CTA */}
       <div className="w-full h-56 bg-white">
         <p>Waitlist CTA</p>
       </div>
 
-      <div className="w-full h-56 bg-white">
-        <p>Footer</p>
+      {/* Footer */}
+      <div className="w-full py-4 bg-black flex items-center justify-center rounded-t-lg">
+        <p className="text-white font-light text-sm">
+          Gratitude by <span className="font-bold">x2o Life</span> © 2026. All rights reserved.</p>
       </div>
     </div>
   );
