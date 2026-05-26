@@ -8,6 +8,8 @@ import {
   selectWaitlistAudience,
   useWaitlistStore,
 } from "@/stores/waitlist-store";
+import { HowItWorksStepper } from "@/components/how-it-works-stepper";
+import RotatingTrustSignals from "@/components/rotating-signals";
 
 const HOW_IT_WORKS = [
   {
@@ -25,6 +27,14 @@ const HOW_IT_WORKS = [
     title: "Engagement grows naturally",
     description: "Better retention without fragmented loyalty systems.",
   },
+];
+
+const TRUST_SIGNALS = [
+  "Built for modern brands",
+  "Built for smart consumers",
+  "Early access opening soon",
+  "Designed for digital-first commerce",
+  "Join the first wave",
 ];
 
 export default function HomePage() {
@@ -72,7 +82,7 @@ export default function HomePage() {
       </div>
 
       {/* How it works section */}
-      <div className="w-full p-16 bg-white flex flex-col items-center">
+      <div className="w-full p-16 px-10 bg-white flex flex-col items-center">
         {/* <div className="flex items-center gap-2">
           <Badge
             role="button"
@@ -115,7 +125,7 @@ export default function HomePage() {
             Consumer
           </Badge>
         </div> */}
-        <div className="flex flex-col items-center">
+        <div className="w-full flex flex-col items-center">
           <p className="text-3xl font-medium font-bodoni-moda">How it works</p>
           <p className="mt-2 text-center max-w-6xl font-light text-gray-500">
             Launching a modern, simple, and beautiful loyalty program should be
@@ -125,32 +135,13 @@ export default function HomePage() {
             use.
           </p>
 
-          <div className="grid grid-cols-3 gap-20 mt-8">
-            {/* 
-              TODO: Create custom icons for each feature.
-              Make it look like a stepper. Add connecting lines.
-              Try adding numbers instead of icons.
-            */}
-            {HOW_IT_WORKS.map(({ icon: Icon, title, description }) => {
-              return (
-                <div key={title} className="p-6 flex flex-col items-center">
-                  <div className="w-12 aspect-square rounded-lg bg-violet-300 flex items-center justify-center">
-                    <Icon />
-                  </div>
-                  <p className="mt-6 text-xl font-medium font-bodoni-moda">
-                    {title}
-                  </p>
-                  <p className="text-sm font-normal text-gray-500">
-                    {description}
-                  </p>
-                </div>
-              );
-            })}
+          <div className="mt-16 w-full">
+            <HowItWorksStepper steps={HOW_IT_WORKS} />
           </div>
         </div>
       </div>
 
-      {/* Built for section */}
+      {/* Built for section (Incomplete) */}
       <div className="w-full bg-white min-h-1/2 flex border">
         <div className="w-[55%] p-16 rounded-r-lg shadow-sm bg-[linear-gradient(180deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff_10%,#ddd6fe_100%)] bg-size-[100%_2px,100%_100%]">
           <p className="text-3xl font-medium font-bodoni-moda">
@@ -174,7 +165,7 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* What you can create section */}
+      {/* What you can create section (Incomplete) */}
       <div className="w-full p-16 bg-white flex flex-col items-center">
         <p className="text-3xl font-medium font-bodoni-moda">Create with Gratitude</p>
 
@@ -196,12 +187,13 @@ export default function HomePage() {
       </div>
 
       {/* Social Proof section */}
-      <div className="w-full h-56 bg-white">
-        <p>Social Proof</p>
+      <div className="w-full min-h-1/3 p-8 bg-white flex flex-col items-center">
+        <p className="text-xs text-gray-400 uppercase">Trust Signals</p>
+        <RotatingTrustSignals items={TRUST_SIGNALS} />
       </div>
 
-      {/* Waitlist CTA */}
-      <div className="w-full h-56 bg-white">
+      {/* Waitlist CTA (Incomplete) */}
+      <div className="w-full p-16 bg-white">
         <p>Waitlist CTA</p>
       </div>
 
