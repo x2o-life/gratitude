@@ -3,13 +3,16 @@
 import { ArrowRightIcon, ChartLine, Proportions, Users } from "lucide-react";
 import AnimatedColumns from "@/components/animated-columns";
 import CoffeeCupGroup from "@/components/coffee-cup-group";
+import FloatingBadges from "@/components/floating-badges";
+import { HowItWorksStepper } from "@/components/how-it-works-stepper";
+import RotatingTrustSignals from "@/components/rotating-signals";
+import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import { cn } from "@/lib/utils";
 import {
   selectWaitlistAudience,
   useWaitlistStore,
 } from "@/stores/waitlist-store";
-import { HowItWorksStepper } from "@/components/how-it-works-stepper";
-import RotatingTrustSignals from "@/components/rotating-signals";
 
 const HOW_IT_WORKS = [
   {
@@ -43,7 +46,7 @@ export default function HomePage() {
 
   return (
     <div className="relative w-full overflow-x-hidden">
-      {/* Hero section */}
+      {/* Gateway */}
       <div className="relative flex w-full h-screen items-center justify-center overflow-hidden bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
         <AnimatedColumns />
         <CoffeeCupGroup />
@@ -81,9 +84,118 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* How it works section */}
+      {/* Flow */}
       <div className="w-full p-16 px-10 bg-white flex flex-col items-center">
-        {/* <div className="flex items-center gap-2">
+        <div className="w-full flex flex-col items-center">
+          <p className="text-3xl font-medium font-bodoni-moda">How it works</p>
+          <p className="mt-2 text-center max-w-6xl font-light text-gray-500">
+            Launching a modern, simple, and beautiful loyalty program should be
+            easy for businesses and enjoyable for customers. Gratitude makes
+            that possible—giving your brand a central place to connect with
+            customers and turn loyalty into something they will actually want to
+            use.
+          </p>
+
+          <div className="mt-16 w-full">
+            <HowItWorksStepper steps={HOW_IT_WORKS} />
+          </div>
+        </div>
+      </div>
+
+      {/* Shift */}
+      <div className="w-full p-16 flex flex-col items-center bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
+        <p className="text-center max-w-3xl text-xl text-gray-700">
+          Loyalty programs haven’t evolved with modern digital commerce.
+          Gratitude brings rewards, engagement and retention into one connected
+          experience.
+        </p>
+      </div>
+
+      {/* Duality (Incomplete) */}
+      {/* TODO: Add Images */}
+      <div className="w-full bg-white min-h-1/2 flex">
+        <div className="w-1/2 p-12 border group">
+          <p className="text-5xl font-medium font-bodoni-moda">Consumers</p>
+          <p
+            className={cn(
+              "text text-gray-500",
+              "group-hover:text-orange-300 transition-colors duration-400",
+            )}
+          >
+            get connected
+          </p>
+
+          <div className="mt-8 flex w-xs flex-wrap gap-2">
+            {[
+              "Unified Rewards",
+              "Easy Redemption",
+              "Discover Perks",
+              "One Wallet",
+            ].map((label) => (
+              <Badge
+                key={label}
+                className={cn(
+                  "rounded-sm bg-gray-100 text-black font-normal p-3",
+                  "group-hover:bg-transparent group-hover:border group-hover:border-orange-300 transition-colors duration-400",
+                )}
+              >
+                {label}
+              </Badge>
+            ))}
+          </div>
+        </div>
+
+        <div className="flex-1 flex flex-col items-end justify-end p-12 group">
+          <p
+            className={cn(
+              "text text-gray-500",
+              "group-hover:text-violet-300 transition-colors duration-400",
+            )}
+          >
+            to their favourite
+          </p>
+          <p className="text-5xl font-medium font-bodoni-moda">Brands</p>
+
+          <div className="mt-8 flex justify-end w-xs flex-wrap gap-2">
+            {[
+              "Retention",
+              "Engagement",
+              "Campaigns",
+              "Insights",
+              "Loyalty",
+            ].map((label) => (
+              <Badge
+                key={label}
+                className={cn(
+                  "rounded-sm bg-gray-100 text-black font-normal p-3",
+                  "group-hover:bg-transparent group-hover:border group-hover:border-violet-300 transition-colors duration-400",
+                )}
+              >
+                {label}
+              </Badge>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Modules (Change) */}
+      <div className="w-full p-16 bg-white flex flex-col items-center bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
+        <p className="text-3xl font-medium font-bodoni-moda">
+          Create with Gratitude
+        </p>
+
+        <FloatingBadges />
+      </div>
+
+      {/* Signals */}
+      <div className="w-full min-h-1/3 p-8 bg-white flex flex-col items-center">
+        <p className="text-xs text-gray-400 uppercase">Trust Signals</p>
+        <RotatingTrustSignals items={TRUST_SIGNALS} />
+      </div>
+
+      {/* Waitlist (Incomplete) */}
+      {/* <div className="w-full p-16 bg-white">
+        <div className="flex items-center gap-2">
           <Badge
             role="button"
             tabIndex={0}
@@ -124,83 +236,16 @@ export default function HomePage() {
           >
             Consumer
           </Badge>
-        </div> */}
-        <div className="w-full flex flex-col items-center">
-          <p className="text-3xl font-medium font-bodoni-moda">How it works</p>
-          <p className="mt-2 text-center max-w-6xl font-light text-gray-500">
-            Launching a modern, simple, and beautiful loyalty program should be
-            easy for businesses and enjoyable for customers. Gratitude makes
-            that possible—giving your brand a central place to connect with
-            customers and turn loyalty into something they will actually want to
-            use.
-          </p>
-
-          <div className="mt-16 w-full">
-            <HowItWorksStepper steps={HOW_IT_WORKS} />
-          </div>
         </div>
-      </div>
-
-      {/* Built for section (Incomplete) */}
-      <div className="w-full bg-white min-h-1/2 flex border">
-        <div className="w-[55%] p-16 rounded-r-lg shadow-sm bg-[linear-gradient(180deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff_10%,#ddd6fe_100%)] bg-size-[100%_2px,100%_100%]">
-          <p className="text-3xl font-medium font-bodoni-moda">
-            Built for Brands
-          </p>
-          <ul className="list-disc">
-            <li className="text-sm">Launch loyalty campaigns fast</li>
-            <li className="text-sm">Understand customer behaviour</li>
-            <li className="text-sm">Increase retention and repeat purchases</li>
-          </ul>
-        </div>
-        <div className="flex-1 p-16 bg-[linear-gradient(180deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff_10%,#fed7aa_100%)] bg-size-[100%_2px,100%_100%]">
-          <p className="text-3xl font-medium font-bodoni-moda">
-            Built for Clients
-          </p>
-          <ul className="list-disc">
-            <li className="text-sm">Keep rewards in one place</li>
-            <li className="text-sm">Discover perks across brands</li>
-            <li className="text-sm">Earn rewards without friction</li>
-          </ul>
-        </div>
-      </div>
-
-      {/* What you can create section (Incomplete) */}
-      <div className="w-full p-16 bg-white flex flex-col items-center">
-        <p className="text-3xl font-medium font-bodoni-moda">Create with Gratitude</p>
-
-        <div className="mt-8 w-5xl grid grid-cols-3 gap-4">
-          <div className="border p-4 py-8 flex items-center justify-center rounded-lg">Points & Rewards</div>
-          <div className="border p-4 py-8 flex items-center justify-center rounded-lg col-span-2">Tier Memberships</div>
-          <div className="border p-4 py-8 flex items-center justify-center rounded-lg col-span-2">Referral Campaign</div>
-          <div className="border p-4 py-8 flex items-center justify-center rounded-lg">Digital Perks</div>
-          <div className="border p-4 py-8 flex items-center justify-center rounded-lg">Cashback & Credits</div>
-          <div className="border p-4 py-8 flex items-center justify-center rounded-lg">Streaks & Challenges</div>
-          <div className="border p-4 py-8 flex items-center justify-center rounded-lg">Gift Cards</div>
-        </div>
-      </div>
-
-      {/* Why now section */}
-      <div className="w-full p-16 flex flex-col items-center bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
-        <p className="text-center max-w-3xl text-xl text-gray-700">Loyalty programs haven’t evolved with modern digital commerce.
-          Gratitude brings rewards, engagement and retention into one connected experience.</p>
-      </div>
-
-      {/* Social Proof section */}
-      <div className="w-full min-h-1/3 p-8 bg-white flex flex-col items-center">
-        <p className="text-xs text-gray-400 uppercase">Trust Signals</p>
-        <RotatingTrustSignals items={TRUST_SIGNALS} />
-      </div>
-
-      {/* Waitlist CTA (Incomplete) */}
-      <div className="w-full p-16 bg-white">
         <p>Waitlist CTA</p>
-      </div>
+      </div> */}
 
-      {/* Footer */}
+      {/* Terminal */}
       <div className="w-full py-4 bg-black flex items-center justify-center rounded-t-lg">
         <p className="text-white font-light text-sm">
-          Gratitude by <span className="font-bold">x2o Life</span> © 2026. All rights reserved.</p>
+          Gratitude by <span className="font-bold">x2o Life</span> © 2026. All
+          rights reserved.
+        </p>
       </div>
     </div>
   );
