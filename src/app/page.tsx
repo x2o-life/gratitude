@@ -1,9 +1,9 @@
 "use client";
 
-import { ArrowRightIcon, ChartLine, Proportions, Users } from "lucide-react";
+import { ArrowRightIcon, ChartLine, Circle, Dot, Proportions, Users } from "lucide-react";
+import Image from "next/image";
 import AnimatedColumns from "@/components/animated-columns";
 import CoffeeCupGroup from "@/components/coffee-cup-group";
-import FloatingBadges from "@/components/floating-badges";
 import { HowItWorksStepper } from "@/components/how-it-works-stepper";
 import RotatingTrustSignals from "@/components/rotating-signals";
 import { Badge } from "@/components/ui/badge";
@@ -13,6 +13,7 @@ import {
   selectWaitlistAudience,
   useWaitlistStore,
 } from "@/stores/waitlist-store";
+import ModulesScrollspy from "@/components/modules-scrollspy";
 
 const HOW_IT_WORKS = [
   {
@@ -41,8 +42,8 @@ const TRUST_SIGNALS = [
 ];
 
 export default function HomePage() {
-  const _audience = useWaitlistStore(selectWaitlistAudience);
-  const _setAudience = useWaitlistStore((store) => store.setAudience);
+  const audience = useWaitlistStore(selectWaitlistAudience);
+  const setAudience = useWaitlistStore((store) => store.setAudience);
 
   return (
     <div className="relative w-full overflow-x-hidden">
@@ -114,7 +115,7 @@ export default function HomePage() {
       {/* Duality (Incomplete) */}
       {/* TODO: Add Images */}
       <div className="w-full bg-white min-h-1/2 flex">
-        <div className="w-1/2 p-12 border group">
+        <div className="w-1/2 p-12 group relative overflow-hidden">
           <p className="text-5xl font-medium font-bodoni-moda">Consumers</p>
           <p
             className={cn(
@@ -143,9 +144,21 @@ export default function HomePage() {
               </Badge>
             ))}
           </div>
+
+          <div className="absolute bottom-0 -right-20">
+            <Image
+              src="/hangtag-1.png"
+              alt="hangtag"
+              width="600"
+              height="600"
+              className="saturate-0 group-hover:saturate-100"
+            />
+          </div>
         </div>
 
-        <div className="flex-1 flex flex-col items-end justify-end p-12 group">
+        <div className="w-px bg-gray-200 my-10" />
+
+        <div className="relative flex-1 flex flex-col items-end justify-end p-12 group overflow-hidden">
           <p
             className={cn(
               "text text-gray-500",
@@ -175,16 +188,28 @@ export default function HomePage() {
               </Badge>
             ))}
           </div>
+
+          <div className="absolute top-5 -left-5">
+            <Image
+              src="/tshirt.png"
+              alt="hangtag"
+              width="550"
+              height="550"
+              className="saturate-0 group-hover:saturate-100"
+            />
+          </div>
         </div>
       </div>
 
       {/* Modules (Change) */}
-      <div className="w-full p-16 bg-white flex flex-col items-center bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
-        <p className="text-3xl font-medium font-bodoni-moda">
-          Create with Gratitude
-        </p>
+      <div className="w-full py-6 px-12 flex justify-center items-center bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
+        <div className="w-full p-12 bg-white rounded-lg flex flex-col items-center">
+          <p className="text-3xl font-medium font-bodoni-moda">
+            Create with Gratitude
+          </p>
 
-        <FloatingBadges />
+          <ModulesScrollspy />
+        </div>
       </div>
 
       {/* Signals */}
@@ -194,7 +219,7 @@ export default function HomePage() {
       </div>
 
       {/* Waitlist (Incomplete) */}
-      {/* <div className="w-full p-16 bg-white">
+      <div className="w-full p-16 bg-white">
         <div className="flex items-center gap-2">
           <Badge
             role="button"
@@ -238,7 +263,7 @@ export default function HomePage() {
           </Badge>
         </div>
         <p>Waitlist CTA</p>
-      </div> */}
+      </div>
 
       {/* Terminal */}
       <div className="w-full py-4 bg-black flex items-center justify-center rounded-t-lg">

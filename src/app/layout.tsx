@@ -1,8 +1,8 @@
 import type { Metadata } from "next";
 import { Bodoni_Moda, Geist_Mono, Inter } from "next/font/google";
 import "./globals.css";
-import { cn } from "@/lib/utils";
 import Topbar from "@/components/layout/topbar";
+import { cn } from "@/lib/utils";
 
 const inter = Inter({
   subsets: ["latin"],
@@ -39,6 +39,7 @@ export default function RootLayout({
   return (
     <html
       lang="en"
+      suppressHydrationWarning
       className={cn(
         "h-full antialiased",
         inter.variable,
