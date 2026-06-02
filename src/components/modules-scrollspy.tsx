@@ -2,7 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Circle, GripVertical } from "lucide-react";
-import { useEffect, useState } from "react";
+import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Badge } from "./ui/badge";
 import {
@@ -257,89 +257,233 @@ function BYOTContent() {
   );
 }
 
+const TRACK_RADIUS = 8;
+/** Center-to-center spacing: diameter + gap (gap equals diameter). */
+const TRACK_STEP = TRACK_RADIUS * 4;
+const TRACK_VIEW_WIDTH = 400;
+const TRACK_VIEW_HEIGHT = 320;
+const TRACK_CENTER_X = TRACK_VIEW_WIDTH / 2;
+const TRACK_CENTER_Y = TRACK_VIEW_HEIGHT / 2;
+const TRACK_GROWTH_TURNS = 20;
+const TRACK_NODE_COLORS = [
+  "#c4b5fd", // violet-300
+  "#ddd6fe", // violet-200
+  "#fdba74", // orange-300
+  "#fed7aa", // orange-200
+] as const;
+
+type SpreadDirection = "north" | "south" | "east" | "west";
+
+const SPREAD_DIRECTIONS: SpreadDirection[] = [
+  "north",
+  "south",
+  "east",
+  "west",
+];
+
+const SPREAD_DELTA: Record<SpreadDirection, [number, number]> = {
+  north: [0, -1],
+  south: [0, 1],
+  east: [1, 0],
+  west: [-1, 0],
+};
+
+type SpreadNode = {
+  id: number;
+  gx: number;
+  gy: number;
+  x: number;
+  y: number;
+  r: number;
+  fill: string;
+  lineStep: number;
+  nodeStep: number;
+  turn: number;
+};
+
+type SpreadLine = {
+  from: number;
+  to: number;
+  step: number;
+};
+
+type SpreadNetwork = {
+  nodes: SpreadNode[];
+  lines: SpreadLine[];
+  durationMs: number;
+};
+
+function seededRandom(seed: number) {
+  let state = seed >>> 0;
+  return () => {
+    state = (state * 1_664_525 + 1_013_904_223) >>> 0;
+    return state / 0x1_0000_0000;
+  };
+}
+
+function shuffleWithRng<T>(items: T[], rng: () => number) {
+  const copy = [...items];
+  for (let index = copy.length - 1; index > 0; index -= 1) {
+    const swapIndex = Math.floor(rng() * (index + 1));
+    [copy[index], copy[swapIndex]] = [copy[swapIndex], copy[index]];
+  }
+  return copy;
+}
+
+function gridKey(gx: number, gy: number) {
+  return `${gx},${gy}`;
+}
+
+function gridToPixel(gx: number, gy: number) {
+  return {
+    x: TRACK_CENTER_X + gx * TRACK_STEP,
+    y: TRACK_CENTER_Y + gy * TRACK_STEP,
+  };
+}
+
+function isInsideView(x: number, y: number) {
+  const margin = TRACK_RADIUS + 12;
+  return (
+    x - margin >= 0 &&
+    x + margin <= TRACK_VIEW_WIDTH &&
+    y - margin >= 0 &&
+    y + margin <= TRACK_VIEW_HEIGHT
+  );
+}
+
+function pickRandomNodeColor(rng: () => number) {
+  return TRACK_NODE_COLORS[
+    Math.floor(rng() * TRACK_NODE_COLORS.length)
+  ] as (typeof TRACK_NODE_COLORS)[number];
+}
+
+function findSpawnCell(
+  parent: SpreadNode,
+  occupied: Set<string>,
+  rng: () => number,
+) {
+  const directions = shuffleWithRng(SPREAD_DIRECTIONS, rng);
+
+  for (const direction of directions) {
+    const [dx, dy] = SPREAD_DELTA[direction];
+    const nextGx = parent.gx + dx;
+    const nextGy = parent.gy + dy;
+    const nextKey = gridKey(nextGx, nextGy);
+
+    if (occupied.has(nextKey)) {
+      continue;
+    }
+
+    const { x, y } = gridToPixel(nextGx, nextGy);
+    if (!isInsideView(x, y)) {
+      continue;
+    }
+
+    return { gx: nextGx, gy: nextGy, x, y };
+  }
+
+  return null;
+}
+
+function buildSpreadNetwork(seed: number): SpreadNetwork {
+  const rng = seededRandom(seed);
+  const occupied = new Set<string>();
+  const nodes: SpreadNode[] = [];
+  const lines: SpreadLine[] = [];
+  let animationStep = 0;
+
+  // Turn 1: center node only
+  occupied.add(gridKey(0, 0));
+  nodes.push({
+    id: 0,
+    gx: 0,
+    gy: 0,
+    x: TRACK_CENTER_X,
+    y: TRACK_CENTER_Y,
+    r: TRACK_RADIUS,
+    fill: pickRandomNodeColor(rng),
+    lineStep: 0,
+    nodeStep: 0,
+    turn: 1,
+  });
+  animationStep = 1;
+
+  for (let turn = 2; turn <= TRACK_GROWTH_TURNS; turn += 1) {
+    const parents =
+      turn === 2 ? [nodes[0]] : shuffleWithRng([...nodes], rng);
+    const turnLineStep = animationStep;
+    const turnNodeStep = animationStep + 1;
+    let spawnedThisTurn = false;
+
+    for (const parent of parents) {
+      const cell = findSpawnCell(parent, occupied, rng);
+      if (!cell) {
+        continue;
+      }
+
+      spawnedThisTurn = true;
+      const id = nodes.length;
+      occupied.add(gridKey(cell.gx, cell.gy));
+      lines.push({ from: parent.id, to: id, step: turnLineStep });
+      nodes.push({
+        id,
+        gx: cell.gx,
+        gy: cell.gy,
+        x: cell.x,
+        y: cell.y,
+        r: TRACK_RADIUS,
+        fill: pickRandomNodeColor(rng),
+        lineStep: turnLineStep,
+        nodeStep: turnNodeStep,
+        turn,
+      });
+    }
+
+    if (spawnedThisTurn) {
+      animationStep += 2;
+    }
+  }
+
+  const durationMs = animationStep * 450 + 800;
+
+  return { nodes, lines, durationMs };
+}
+
+function getSpreadTiming(type: "node" | "line", step: number) {
+  const beat = 0.45;
+  if (type === "node") {
+    return { delay: step * beat, duration: 0.3 };
+  }
+  return { delay: step * beat, duration: 0.35 };
+}
+
 function TrackContent() {
   const [key, setKey] = useState(0);
+
+  const { nodes, lines, durationMs } = useMemo(
+    () => buildSpreadNetwork(key),
+    [key],
+  );
 
   useEffect(() => {
     const interval = setInterval(() => {
       setKey((prev) => prev + 1);
-    }, 5000);
+    }, durationMs);
     return () => clearInterval(interval);
-  }, []);
-
-  // Nodes definition representing growth stages
-  const nodes = [
-    // Level 0
-    { id: 0, x: 40, y: 160, r: 9, fill: "#8b5cf6" }, // violet-500
-    // Level 1
-    { id: 1, x: 120, y: 160, r: 8, fill: "#a78bfa" }, // violet-400
-    // Level 2
-    { id: 2, x: 200, y: 100, r: 7, fill: "#c4b5fd" }, // violet-300
-    { id: 3, x: 200, y: 220, r: 7, fill: "#c4b5fd" },
-    // Level 3
-    { id: 4, x: 280, y: 70, r: 6, fill: "#fdba74" }, // orange-300
-    { id: 5, x: 280, y: 130, r: 6, fill: "#fdba74" },
-    { id: 6, x: 280, y: 190, r: 6, fill: "#fdba74" },
-    { id: 7, x: 280, y: 250, r: 6, fill: "#fdba74" },
-    // Level 4
-    { id: 8, x: 360, y: 55, r: 5, fill: "#f97316" }, // orange-500
-    { id: 9, x: 360, y: 85, r: 5, fill: "#f97316" },
-    { id: 10, x: 360, y: 115, r: 5, fill: "#f97316" },
-    { id: 11, x: 360, y: 145, r: 5, fill: "#f97316" },
-    { id: 12, x: 360, y: 175, r: 5, fill: "#f97316" },
-    { id: 13, x: 360, y: 205, r: 5, fill: "#f97316" },
-    { id: 14, x: 360, y: 235, r: 5, fill: "#f97316" },
-    { id: 15, x: 360, y: 265, r: 5, fill: "#f97316" },
-  ];
-
-  // Connections definition: [from_node_id, to_node_id, stage]
-  const lines = [
-    { from: 0, to: 1, stage: 0 },
-
-    { from: 1, to: 2, stage: 1 },
-    { from: 1, to: 3, stage: 1 },
-
-    { from: 2, to: 4, stage: 2 },
-    { from: 2, to: 5, stage: 2 },
-    { from: 3, to: 6, stage: 2 },
-    { from: 3, to: 7, stage: 2 },
-
-    { from: 4, to: 8, stage: 3 },
-    { from: 4, to: 9, stage: 3 },
-    { from: 5, to: 10, stage: 3 },
-    { from: 5, to: 11, stage: 3 },
-    { from: 6, to: 12, stage: 3 },
-    { from: 6, to: 13, stage: 3 },
-    { from: 7, to: 14, stage: 3 },
-    { from: 7, to: 15, stage: 3 },
-  ];
-
-  // Timing helper
-  const getTiming = (type: "node" | "line", level: number) => {
-    if (type === "node") {
-      return {
-        delay: level * 0.7,
-        duration: 0.3,
-      };
-    }
-    return {
-      delay: level * 0.7 + 0.3,
-      duration: 0.4,
-    };
-  };
+  }, [durationMs]);
 
   return (
     <div
       key={key}
-      className="relative w-[400px] h-[320px] flex items-center justify-center"
+      className="relative flex h-[320px] w-[400px] items-center justify-center"
     >
-      <svg className="w-full h-full" viewBox="0 0 400 320">
-        <title>Exponential Network Growth</title>
-        {/* Draw Lines first so they sit behind circles */}
+      <svg className="h-full w-full" viewBox={`0 0 ${TRACK_VIEW_WIDTH} ${TRACK_VIEW_HEIGHT}`}>
+        <title>Network spread growth</title>
         {lines.map((line) => {
           const fromNode = nodes[line.from];
           const toNode = nodes[line.to];
-          const { delay, duration } = getTiming("line", line.stage);
+          const { delay, duration } = getSpreadTiming("line", line.step);
+
           return (
             <motion.line
               key={`line-${line.from}-${line.to}`}
@@ -360,15 +504,8 @@ function TrackContent() {
           );
         })}
 
-        {/* Draw Node Circles */}
         {nodes.map((node) => {
-          let level = 0;
-          if (node.x === 120) level = 1;
-          else if (node.x === 200) level = 2;
-          else if (node.x === 280) level = 3;
-          else if (node.x === 360) level = 4;
-
-          const { delay, duration } = getTiming("node", level);
+          const { delay, duration } = getSpreadTiming("node", node.nodeStep);
 
           return (
             <motion.circle
