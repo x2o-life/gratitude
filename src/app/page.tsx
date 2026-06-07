@@ -235,7 +235,7 @@ export default function HomePage() {
       </div>
 
       {/* Waitlist (Incomplete) */}
-      <div id="waiting-list" className="w-full p-16 bg-white border">
+      <div id="waiting-list" className="w-full p-16 bg-white">
         <div className="flex justify-center items-center gap-2">
           <Badge
             role="button"
