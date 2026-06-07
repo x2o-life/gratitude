@@ -50,7 +50,7 @@ export function HowItWorksStepper({ steps }: HowItWorksStepperProps) {
               </div>
               <StepperTitle
                 className={cn(
-                  "text-center text-xl font-medium font-bodoni-moda transition-colors duration-300",
+                  "mt-4 text-center text-xl font-medium font-bodoni-moda transition-colors duration-300",
                   "data-[state=inactive]:text-muted-foreground",
                 )}
               >
@@ -58,7 +58,7 @@ export function HowItWorksStepper({ steps }: HowItWorksStepperProps) {
               </StepperTitle>
               <StepperDescription 
                 className={cn(
-                  "mt-1 w-56 text-center font-light text-foreground transition-colors duration-300",
+                  "w-md text-center font-light text-foreground transition-colors duration-300",
                   "data-[state=inactive]:text-muted-foreground",
                 )}
               >

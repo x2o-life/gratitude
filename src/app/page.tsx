@@ -5,7 +5,6 @@ import Image from "next/image";
 import AnimatedColumns from "@/components/animated-columns";
 import CoffeeCupGroup from "@/components/coffee-cup-group";
 import { HowItWorksStepper } from "@/components/how-it-works-stepper";
-import ModulesScrollspy from "@/components/modules-scrollspy";
 import RotatingTrustSignals from "@/components/rotating-signals";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -15,6 +14,7 @@ import {
   selectWaitlistAudience,
   useWaitlistStore,
 } from "@/stores/waitlist-store";
+import ModulesBento from "@/components/modules-bento";
 
 const HOW_IT_WORKS = [
   {
@@ -102,10 +102,10 @@ export default function HomePage() {
       </div>
 
       {/* Flow */}
-      <div className="w-full p-16 px-10 bg-white flex flex-col items-center">
+      <div className="w-full p-24 px-10 bg-white flex flex-col items-center justify-center">
         <div className="w-full flex flex-col items-center">
           <p className="text-3xl font-medium font-bodoni-moda">How it works</p>
-          <p className="mt-2 text-center max-w-6xl font-light text-gray-500">
+          <p className="mt-4 text-center max-w-6xl font-light text-gray-500">
             Launching a modern, simple, and beautiful loyalty program should be
             easy for businesses and enjoyable for customers. Gratitude makes
             that possible—giving your brand a central place to connect with
@@ -113,24 +113,24 @@ export default function HomePage() {
             use.
           </p>
 
-          <div className="mt-16 w-full">
+          <div className="mt-20 w-full">
             <HowItWorksStepper steps={HOW_IT_WORKS} />
           </div>
         </div>
       </div>
 
-      {/* Shift */}
-      <div className="w-full p-16 flex flex-col items-center bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
-        <p className="text-center max-w-3xl text-xl text-gray-700">
-          Loyalty programs haven’t evolved with modern digital commerce.
-          Gratitude brings rewards, engagement and retention into one connected
+      {/* Shift (Incomplete) */}
+      {/* TODO: Change background */}
+      <div className="w-full p-24 flex flex-col items-center bg-gray-50">
+        <p className="text-center max-w-4xl text-xl text-gray-700">
+          <span className="text-orange-300">Loyalty programs</span> haven’t evolved with modern digital commerce.
+          <span className="text-violet-300"> Gratitude</span> brings <span className="text-orange-300">rewards, engagement and retention</span> into one connected
           experience.
         </p>
       </div>
 
-      {/* Duality (Incomplete) */}
-      {/* TODO: Add Images */}
-      <div className="w-full bg-white min-h-1/2 flex">
+      {/* Duality */}
+      <div className="w-full bg-white min-h-2/3 flex">
         <div className="w-1/2 p-12 group relative overflow-hidden">
           <p className="text-5xl font-medium font-bodoni-moda">Consumers</p>
           <p
@@ -161,7 +161,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="absolute bottom-0 -right-20">
+          <div className="absolute -top-40 -right-20">
             <Image
               src="/hangtag-1.png"
               alt="hangtag"
@@ -205,7 +205,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="absolute top-5 -left-5">
+          <div className="absolute -bottom-30 -left-5">
             <Image
               src="/tshirt.png"
               alt="hangtag"
@@ -217,14 +217,14 @@ export default function HomePage() {
         </div>
       </div>
 
-      {/* Modules (Change) */}
-      <div className="w-full py-6 px-12 flex justify-center items-center bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
+      {/* Modules */}
+      <div className="w-full py-6 px-12 flex justify-center items-center bg-gray-50">
         <div className="w-full p-12 bg-white rounded-lg flex flex-col items-center">
           <p className="text-3xl font-medium font-bodoni-moda">
             Create with Gratitude
           </p>
-
-          <ModulesScrollspy />
+          
+          <ModulesBento />
         </div>
       </div>
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { motion } from "framer-motion";
-import { Circle, GripVertical } from "lucide-react";
+import { GripVertical } from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Badge } from "./ui/badge";
@@ -13,97 +13,9 @@ import {
   ComboboxTrigger,
 } from "./ui/combobox";
 
-const MODULES = [
-  {
-    id: 1,
-    title: "Launch Campaigns in minutes",
-    description:
-      "Create and publish loyalty experiences without lengthy setup or technical complexity.",
-  },
-  {
-    id: 2,
-    title: "Start with Ready-made Templates",
-    description:
-      "Choose from proven campaign templates and customize them to fit your brand.",
-  },
-  {
-    id: 3,
-    title: "Build Rewards Your Way",
-    description:
-      "Combine points, tiers, referrals and perks to create a program that feels uniquely yours.",
-  },
-  {
-    id: 4,
-    title: "Adapt Campaigns As You Grow",
-    description:
-      "Refine and expand your loyalty strategy as your audience, goals and business evolve.",
-  },
-];
-
-export default function ModulesScrollspy() {
-  const [currentModule, setCurrentModule] = useState(1);
-
+export function CampaignsContent() {
   return (
-    <div className="mt-16 w-full grid grid-cols-5 gap-10">
-      <div className="flex flex-col gap-6 col-span-2">
-        {MODULES.map((module) => (
-          <button
-            key={module.id}
-            type="button"
-            className={cn(
-              "text-left border w-full flex flex-col gap-1 p-2 rounded-lg group transition-all duration-200 outline-none focus-visible:ring-2 focus-visible:ring-violet-300",
-              currentModule === module.id
-                ? "border-violet-300 bg-violet-50"
-                : "border-transparent hover:border-violet-200 hover:bg-violet-50/50",
-            )}
-            onClick={() => setCurrentModule(module.id)}
-          >
-            <div className="flex gap-4 items-center">
-              <Circle
-                strokeWidth={4}
-                className={cn(
-                  "size-2.5 text-violet-300 transition-colors",
-                  currentModule === module.id
-                    ? "fill-violet-300"
-                    : "group-hover:fill-violet-300",
-                )}
-              />
-              <p className="text-lg font-medium font-bodoni-moda">
-                {module.title}
-              </p>
-            </div>
-            <p className="text-sm text-gray-500">{module.description}</p>
-          </button>
-        ))}
-      </div>
-
-      <div className="col-span-3 p-8 flex justify-center items-center border rounded-lg">
-        <ContentLoader currentModule={currentModule} />
-      </div>
-    </div>
-  );
-}
-
-function ContentLoader({ currentModule }: { currentModule: number }) {
-  switch (currentModule) {
-    case 1: {
-      return <CampaignsContent />;
-    }
-    case 2: {
-      return <TemplatesContent />;
-    }
-    case 3: {
-      return <BYOTContent />;
-    }
-    case 4: {
-      return <TrackContent />;
-    }
-  }
-}
-
-function CampaignsContent() {
-  return (
-    <div className="relative w-full translate-x-1/5 h-[320px]">
+    <div className="relative w-full translate-x-1/10 h-[320px]">
       <style>{`
                 @keyframes path-flow {
                     from {
@@ -187,7 +99,7 @@ function CampaignsContent() {
   );
 }
 
-function TemplatesContent() {
+export function TemplatesContent() {
   const TEMPLATES = [
     "Points & Rewards",
     "Tier Memberships",
@@ -199,7 +111,7 @@ function TemplatesContent() {
   ];
 
   return (
-    <div className="max-w-2xl flex flex-wrap justify-center items-end gap-2">
+    <div className="max-w-md flex flex-wrap justify-center items-end gap-2">
       {TEMPLATES.map((template) => (
         <Badge
           key={template}
@@ -219,9 +131,9 @@ function TemplatesContent() {
   );
 }
 
-function BYOTContent() {
+export function BYOTContent() {
   return (
-    <div className="grid grid-cols-3 grid-rows-2 gap-y-4">
+    <div className="max-w-md grid grid-cols-3 grid-rows-2 gap-y-4">
       <div className="col-start-1 min-w-44 flex items-center justify-between p-3 rounded-lg border border-violet-300 relative">
         <p className="ml-1">Audience</p>
         <Combobox>
@@ -257,6 +169,7 @@ function BYOTContent() {
   );
 }
 
+/** Network Spread Animation */
 const TRACK_RADIUS = 8;
 /** Center-to-center spacing: diameter + gap (gap equals diameter). */
 const TRACK_STEP = TRACK_RADIUS * 4;
@@ -457,7 +370,7 @@ function getSpreadTiming(type: "node" | "line", step: number) {
   return { delay: step * beat, duration: 0.35 };
 }
 
-function TrackContent() {
+export function TrackContent() {
   const [key, setKey] = useState(0);
 
   const { nodes, lines, durationMs } = useMemo(
