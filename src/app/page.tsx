@@ -1,19 +1,20 @@
 "use client";
 
-import { ArrowRightIcon, ChartLine, Circle, Dot, Proportions, Users } from "lucide-react";
+import { ArrowRightIcon, ChartLine, Proportions, Users } from "lucide-react";
 import Image from "next/image";
 import AnimatedColumns from "@/components/animated-columns";
 import CoffeeCupGroup from "@/components/coffee-cup-group";
 import { HowItWorksStepper } from "@/components/how-it-works-stepper";
+import ModulesScrollspy from "@/components/modules-scrollspy";
 import RotatingTrustSignals from "@/components/rotating-signals";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
+import WaitlistForm from "@/components/waitlist-form";
 import { cn } from "@/lib/utils";
 import {
   selectWaitlistAudience,
   useWaitlistStore,
 } from "@/stores/waitlist-store";
-import ModulesScrollspy from "@/components/modules-scrollspy";
 
 const HOW_IT_WORKS = [
   {
@@ -63,6 +64,12 @@ export default function HomePage() {
             <Button
               type="button"
               className="w-fit cursor-pointer bg-violet-300 text-black hover:bg-gray-900 hover:text-white"
+              onClick={() => {
+                setAudience("brand");
+                document.getElementById("waiting-list")?.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
             >
               <span className="inline-flex items-center gap-1.5 group-hover/button:hidden">
                 You&apos;re a brand?
@@ -72,7 +79,16 @@ export default function HomePage() {
                 <ArrowRightIcon className="size-4 shrink-0" />
               </span>
             </Button>
-            <Button className="w-fit cursor-pointer bg-orange-300 text-black hover:bg-gray-900 hover:text-white">
+            <Button
+              type="button"
+              className="w-fit cursor-pointer bg-orange-300 text-black hover:bg-gray-900 hover:text-white"
+              onClick={() => {
+                setAudience("consumer");
+                document.getElementById("waiting-list")?.scrollIntoView({
+                  behavior: "smooth",
+                });
+              }}
+            >
               <span className="inline-flex items-center gap-1.5 group-hover/button:hidden">
                 You&apos;re a consumer?
               </span>
@@ -219,8 +235,8 @@ export default function HomePage() {
       </div>
 
       {/* Waitlist (Incomplete) */}
-      <div className="w-full p-16 bg-white">
-        <div className="flex items-center gap-2">
+      <div id="waiting-list" className="w-full p-16 bg-white border">
+        <div className="flex justify-center items-center gap-2">
           <Badge
             role="button"
             tabIndex={0}
@@ -262,7 +278,9 @@ export default function HomePage() {
             Consumer
           </Badge>
         </div>
-        <p>Waitlist CTA</p>
+        <div className=" mt-12 w-full px-80">
+          <WaitlistForm />
+        </div>
       </div>
 
       {/* Terminal */}

@@ -1,5 +1,9 @@
 "use client";
 
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useEffect, useState } from "react";
+import { Controller, useForm } from "react-hook-form";
+import * as z from "zod";
 import { Button } from "@/components/ui/button";
 import {
   Field,
@@ -10,15 +14,10 @@ import {
 import { Input } from "@/components/ui/input";
 import { submitWaitlistEntry } from "@/lib/firebase/waitlist";
 import {
-  selectIsWaitlistOpen,
   selectWaitlistAudience,
-  type WaitlistAudience,
   useWaitlistStore,
+  type WaitlistAudience,
 } from "@/stores/waitlist-store";
-import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
-import { Controller, useForm } from "react-hook-form";
-import * as z from "zod";
 
 const formTitles: Record<WaitlistAudience, string> = {
   brand: "Partner with us",
@@ -27,7 +26,7 @@ const formTitles: Record<WaitlistAudience, string> = {
 
 function WaitlistFormTitle({ audience }: { audience: WaitlistAudience }) {
   return (
-    <h3 className="mb-4 font-bodoni-moda text-3xl font-medium">
+    <h3 className="mb-4 font-bodoni-moda text-3xl font-medium text-center">
       {formTitles[audience]}
     </h3>
   );
@@ -113,9 +112,7 @@ function BrandWaitlistForm({ onSuccess }: WaitlistFormProps) {
                 aria-invalid={fieldState.invalid}
                 disabled={isSubmitting}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -146,7 +143,9 @@ function BrandWaitlistForm({ onSuccess }: WaitlistFormProps) {
             control={form.control}
             render={({ field, fieldState }) => (
               <Field data-invalid={fieldState.invalid}>
-                <FieldLabel htmlFor="waitlist-brand-email">Work email</FieldLabel>
+                <FieldLabel htmlFor="waitlist-brand-email">
+                  Work email
+                </FieldLabel>
                 <Input
                   {...field}
                   id="waitlist-brand-email"
@@ -177,9 +176,7 @@ function BrandWaitlistForm({ onSuccess }: WaitlistFormProps) {
                 aria-invalid={fieldState.invalid}
                 disabled={isSubmitting}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -248,9 +245,7 @@ function ConsumerWaitlistForm({ onSuccess }: WaitlistFormProps) {
                 aria-invalid={fieldState.invalid}
                 disabled={isSubmitting}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -269,9 +264,7 @@ function ConsumerWaitlistForm({ onSuccess }: WaitlistFormProps) {
                 aria-invalid={fieldState.invalid}
                 disabled={isSubmitting}
               />
-              {fieldState.invalid && (
-                <FieldError errors={[fieldState.error]} />
-              )}
+              {fieldState.invalid && <FieldError errors={[fieldState.error]} />}
             </Field>
           )}
         />
@@ -294,31 +287,11 @@ function ConsumerWaitlistForm({ onSuccess }: WaitlistFormProps) {
 
 export default function WaitlistForm() {
   const audience = useWaitlistStore(selectWaitlistAudience);
-  const isOpen = useWaitlistStore(selectIsWaitlistOpen);
-  const open = useWaitlistStore((store) => store.open);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  const activeAudience: WaitlistAudience = audience ?? "brand";
-
-  useEffect(() => {
-    if (isOpen && audience === null) {
-      open("brand");
-    }
-  }, [isOpen, audience, open]);
-
-  useEffect(() => {
-    if (!isOpen) {
-      setSubmitSuccess(false);
-    }
-  }, [isOpen]);
 
   useEffect(() => {
     setSubmitSuccess(false);
-  }, [activeAudience]);
-
-  if (!isOpen) {
-    return null;
-  }
+  }, []);
 
   return (
     <div className="flex flex-1 flex-col justify-center">
@@ -326,8 +299,8 @@ export default function WaitlistForm() {
         <WaitlistSuccessMessage />
       ) : (
         <>
-          <WaitlistFormTitle audience={activeAudience} />
-          {activeAudience === "brand" ? (
+          <WaitlistFormTitle audience={audience} />
+          {audience === "brand" ? (
             <BrandWaitlistForm
               key="brand"
               onSuccess={() => setSubmitSuccess(true)}

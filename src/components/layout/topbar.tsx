@@ -1,9 +1,11 @@
-"use client";
-
-import { useWaitlistStore } from "@/stores/waitlist-store";
+'use client'
 
 export default function Topbar() {
-  const openWaitlist = useWaitlistStore((store) => store.open);
+  const handleClick = () => {
+    document
+      .getElementById("waiting-list")
+      ?.scrollIntoView({ behavior: "smooth" });
+  };
 
   return (
     <div className="fixed top-0 z-50 flex w-full items-center justify-between bg-transparent p-4">
@@ -11,7 +13,7 @@ export default function Topbar() {
       <button
         type="button"
         className="cursor-pointer font-bodoni-moda text-xl font-medium transition-opacity hover:opacity-70"
-        onClick={() => openWaitlist("brand")}
+        onClick={handleClick}
       >
         / waiting-list
       </button>
