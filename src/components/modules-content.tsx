@@ -33,7 +33,8 @@ export function CampaignsContent() {
 
       {/* SVG drawing the connecting arrows */}
       <svg
-        className="absolute inset-0 w-full h-full pointer-events-none"
+        viewBox="0 0 450 320"
+        className="pointer-events-none absolute left-0 top-0 h-full w-[450px] max-w-none"
         xmlns="http://www.w3.org/2000/svg"
       >
         <title>Campaign flow arrows</title>
@@ -61,16 +62,6 @@ export function CampaignsContent() {
           className="path-flow-animated"
         />
 
-        {/* Arrow 2: Customize -> Launch (curved, desktop only) */}
-        <path
-          d="M 430 42.5 C 480 42.5, 480 152.5, 438 152.5"
-          fill="none"
-          stroke="#c4b5fd"
-          strokeWidth="2"
-          markerEnd="url(#arrowhead)"
-          className="path-flow-animated"
-        />
-
         {/* Arrow 2 (mobile): Customize -> Launch (straight down) */}
         <path
           d="M 370 65 L 370 120"
@@ -78,7 +69,7 @@ export function CampaignsContent() {
           stroke="#c4b5fd"
           strokeWidth="2"
           markerEnd="url(#arrowhead)"
-          className="path-flow-animated md:hidden"
+          className="path-flow-animated"
         />
 
         {/* Arrow 3: Launch -> Track */}
