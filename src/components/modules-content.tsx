@@ -78,7 +78,7 @@ export function CampaignsContent() {
           stroke="#c4b5fd"
           strokeWidth="2"
           markerEnd="url(#arrowhead)"
-          className="path-flow-animated"
+          className="path-flow-animated md:hidden"
         />
 
         {/* Arrow 3: Launch -> Track */}

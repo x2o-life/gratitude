@@ -15,6 +15,7 @@ import {
   useWaitlistStore,
 } from "@/stores/waitlist-store";
 import ModulesBento from "@/components/modules-bento";
+import { useInView } from "@/hooks/use-in-view";
 
 const HOW_IT_WORKS = [
   {
@@ -45,6 +46,8 @@ const TRUST_SIGNALS = [
 export default function HomePage() {
   const audience = useWaitlistStore(selectWaitlistAudience);
   const setAudience = useWaitlistStore((store) => store.setAudience);
+  const consumersInView = useInView({ threshold: 0.45 });
+  const brandsInView = useInView({ threshold: 0.45 });
 
   return (
     <div className="relative w-full overflow-x-hidden">
@@ -135,12 +138,18 @@ export default function HomePage() {
 
       {/* Duality */}
       <div className="w-full bg-white min-h-2/3 flex flex-col gap-32 md:gap-0 md:flex-row">
-        <div className="w-full md:w-1/2 py-12 px-8 md:p-12 group relative overflow-hidden">
+        <div
+          ref={consumersInView.ref}
+          className={cn(
+            "group relative w-full overflow-hidden py-12 px-8 md:w-1/2 md:p-12",
+            consumersInView.inView && "in-view",
+          )}
+        >
           <p className="text-5xl font-medium font-bodoni-moda">Consumers</p>
           <p
             className={cn(
-              "text text-gray-500",
-              "group-hover:text-orange-300 transition-colors duration-400",
+              "text text-gray-500 transition-colors duration-400",
+              "max-md:group-[.in-view]:text-orange-300 md:group-hover:text-orange-300",
             )}
           >
             get connected
@@ -156,8 +165,9 @@ export default function HomePage() {
               <Badge
                 key={label}
                 className={cn(
-                  "rounded-sm bg-gray-100 text-black font-normal p-3",
-                  "group-hover:bg-transparent group-hover:border group-hover:border-orange-300 transition-colors duration-400",
+                  "rounded-sm bg-gray-100 p-3 font-normal text-black transition-colors duration-400",
+                  "max-md:group-[.in-view]:border max-md:group-[.in-view]:border-orange-300 max-md:group-[.in-view]:bg-transparent",
+                  "md:group-hover:border md:group-hover:border-orange-300 md:group-hover:bg-transparent",
                 )}
               >
                 {label}
@@ -171,25 +181,31 @@ export default function HomePage() {
               alt="hangtag"
               width={600}
               height={600}
-              className="md:w-150 md:h-150 w-100 h-100 saturate-0 group-hover:saturate-100"
+              className="h-100 w-100 saturate-0 transition-all duration-400 md:h-150 md:w-150 max-md:group-[.in-view]:saturate-100 md:group-hover:saturate-100"
             />
           </div>
         </div>
 
         <div className="hidden md:block w-px bg-gray-200 my-10" />
 
-        <div className="relative flex-1 flex flex-col items-end justify-end py-12 px-8 md:p-12 group overflow-hidden">
+        <div
+          ref={brandsInView.ref}
+          className={cn(
+            "group relative flex flex-1 flex-col items-end justify-end overflow-hidden py-12 px-8 md:p-12",
+            brandsInView.inView && "in-view",
+          )}
+        >
           <p
             className={cn(
-              "text text-gray-500",
-              "group-hover:text-violet-300 transition-colors duration-400",
+              "text text-gray-500 transition-colors duration-400",
+              "max-md:group-[.in-view]:text-violet-300 md:group-hover:text-violet-300",
             )}
           >
             to their favourite
           </p>
           <p className="text-5xl font-medium font-bodoni-moda">Brands</p>
 
-          <div className="z-10 mt-8 flex justify-end w-xs flex-wrap gap-2">
+          <div className="z-10 mt-8 flex w-xs flex-wrap justify-end gap-2">
             {[
               "Retention",
               "Engagement",
@@ -200,8 +216,9 @@ export default function HomePage() {
               <Badge
                 key={label}
                 className={cn(
-                  "rounded-sm bg-gray-100 text-black font-normal p-3",
-                  "group-hover:bg-transparent group-hover:border group-hover:border-violet-300 transition-colors duration-400",
+                  "rounded-sm bg-gray-100 p-3 font-normal text-black transition-colors duration-400",
+                  "max-md:group-[.in-view]:border max-md:group-[.in-view]:border-violet-300 max-md:group-[.in-view]:bg-transparent",
+                  "md:group-hover:border md:group-hover:border-violet-300 md:group-hover:bg-transparent",
                 )}
               >
                 {label}
@@ -215,7 +232,7 @@ export default function HomePage() {
               alt="hangtag"
               width={600}
               height={600}
-              className="md:w-150 md:h-150 w-100 h-100 saturate-0 group-hover:saturate-100"
+              className="h-100 w-100 saturate-0 transition-all duration-400 md:h-150 md:w-150 max-md:group-[.in-view]:saturate-100 md:group-hover:saturate-100"
             />
           </div>
         </div>
