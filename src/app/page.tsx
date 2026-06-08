@@ -128,7 +128,7 @@ export default function HomePage() {
       </div>
 
       {/* Shift */}
-      <div className="w-full p-12 md:p-24 flex flex-col items-center bg-gray-50">
+      <div className="w-full p-12 md:p-24 flex flex-col items-center bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
         <p className="text-center md:max-w-4xl md:text-xl text-gray-700">
           <span className="font-medium">Loyalty programs</span> haven’t evolved with modern digital commerce.
           <span className="font-medium"> Gratitude</span> brings <span className="font-medium">rewards, engagement and retention</span> into one connected
@@ -239,11 +239,12 @@ export default function HomePage() {
       </div>
 
       {/* Modules */}
-      <div className="w-full py-6 px-6 md:px-12 flex justify-center items-center bg-gray-50">
-        <div className="w-full p-4 md:p-12 md:bg-white rounded-lg flex flex-col items-center">
+      <div className="w-full py-6 px-6 md:px-12 flex justify-center items-center bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]">
+        <div className="w-full p-4 md:p-12 rounded-lg flex flex-col items-center">
           <p className="text-2xl md:text-3xl font-medium font-bodoni-moda">
             Create with Gratitude
           </p>
+          <p className="text-sm font-light text-gray-500 mt-2">Explore how Gratitude can empower your brand</p>
 
           <ModulesBento />
         </div>
@@ -258,7 +259,7 @@ export default function HomePage() {
       {/* Waitlist */}
       <div
         id="waiting-list"
-        className="w-full py-16 md:p-16 bg-gray-50 relative overflow-hidden"
+        className="w-full py-16 md:p-16 bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%] relative overflow-hidden"
         onMouseMove={(e) => {
           const rect = e.currentTarget.getBoundingClientRect();
           const x = e.clientX - rect.left;
@@ -272,7 +273,7 @@ export default function HomePage() {
           className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f6)] bg-size-[2px_100%,100%_100%]"
         ></div>
         <div
-          className="pointer-events-none absolute inset-0 bg-gray-50"
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f7)] bg-size-[2px_100%,100%_100%]"
           style={{
             maskImage: 'radial-gradient(circle 240px at var(--mouse-x) var(--mouse-y), transparent 0%, black 100%)',
             WebkitMaskImage: 'radial-gradient(circle 240px at var(--mouse-x) var(--mouse-y), transparent 0%, black 100%)',

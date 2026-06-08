@@ -3,7 +3,7 @@ import { BYOTContent, CampaignsContent, TemplatesContent, TrackContent } from ".
 export default function ModulesBento() {
     return (
         <div className="mt-12 w-full grid md:grid-cols-2 gap-4 md:gap-8">
-            <div className="bg-white md:bg-transparent row-span-3 md:row-start-1 flex min-h-100 md:min-h-80 flex-col rounded-lg shadow-sm md:shadow-none md:border p-4 hover:shadow-md transition-shadow duration-300">
+            <div className="bg-white row-span-3 md:row-start-1 flex min-h-100 md:min-h-80 flex-col rounded-lg shadow-sm md:shadow-none md:border p-4 hover:shadow-md transition-shadow duration-300">
                 <div className="flex min-h-0 flex-1 items-center justify-center">
                     <CampaignsContent />
                 </div>
@@ -13,7 +13,7 @@ export default function ModulesBento() {
                 </div>
             </div>
 
-            <div className="bg-white md:bg-transparent row-span-3 md:row-start-2 flex min-h-100 md:min-h-80 flex-col rounded-lg shadow-sm md:shadow-none md:border p-4 hover:shadow-md transition-shadow duration-300">
+            <div className="bg-white row-span-3 md:row-start-2 flex min-h-100 md:min-h-80 flex-col rounded-lg shadow-sm md:shadow-none md:border p-4 hover:shadow-md transition-shadow duration-300">
                 <div className="flex min-h-0 flex-1 items-center justify-center">
                     <TemplatesContent />
                 </div>
@@ -23,7 +23,7 @@ export default function ModulesBento() {
                 </div>
             </div>
 
-            <div className="bg-white md:bg-transparent row-span-3 md:row-start-4 flex min-h-100 md:min-h-80 flex-col rounded-lg shadow-sm md:shadow-none md:border p-4 hover:shadow-md transition-shadow duration-300">
+            <div className="bg-white row-span-3 md:row-start-4 flex min-h-100 md:min-h-80 flex-col rounded-lg shadow-sm md:shadow-none md:border p-4 hover:shadow-md transition-shadow duration-300">
                 <div className="flex min-h-0 flex-1 items-center justify-center">
                     <BYOTContent />
                 </div>
@@ -33,7 +33,7 @@ export default function ModulesBento() {
                 </div>
             </div>
 
-            <div className="bg-white md:bg-transparent row-span-3 md:row-start-5 flex min-h-100 md:min-h-80 flex-col rounded-lg shadow-sm md:shadow-none md:border p-4 hover:shadow-md transition-shadow duration-300">
+            <div className="bg-white row-span-3 md:row-start-5 flex min-h-100 md:min-h-80 flex-col rounded-lg shadow-sm md:shadow-none md:border p-4 hover:shadow-md transition-shadow duration-300">
                 <div className="flex min-h-0 flex-1 items-center justify-center">
                     <TrackContent />
                 </div>
