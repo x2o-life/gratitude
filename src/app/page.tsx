@@ -1,10 +1,10 @@
 "use client";
 
-import { ArrowRightIcon, ChartLine, Proportions, Users } from "lucide-react";
+import { ArrowRightIcon, ChartLine, ChevronRight, Proportions, Users } from "lucide-react";
 import Image from "next/image";
 import AnimatedColumns from "@/components/animated-columns";
 import CoffeeCupGroup from "@/components/coffee-cup-group";
-import { HowItWorksStepper } from "@/components/how-it-works-stepper";
+import { FlowStepper, VerticalFlowStepper } from "@/components/flow-stepper";
 import RotatingTrustSignals from "@/components/rotating-signals";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
@@ -55,7 +55,7 @@ export default function HomePage() {
 
         <div className="relative z-10 max-w-2xl md:translate-y-[-160%] -translate-y-full px-12 md:px-6 flex flex-col items-center">
           <p className="text-5xl font-medium font-bodoni-moda">Gratitude</p>
-          <p className="mt-2 text-center font-light text-gray-500">
+          <p className="mt-2 text-xs md:text-base text-center font-light text-gray-500">
             build loyalty that feel rewarding, modern and easy to use - giving
             your customers one seamless place to stay connected with the brands
             they love.
@@ -102,10 +102,10 @@ export default function HomePage() {
       </div>
 
       {/* Flow */}
-      <div className="w-full p-24 px-10 bg-white flex flex-col items-center justify-center">
+      <div className="w-full p-16 px-4 md:p-24 md:px-10 bg-white flex flex-col items-center justify-center">
         <div className="w-full flex flex-col items-center">
           <p className="text-3xl font-medium font-bodoni-moda">How it works</p>
-          <p className="mt-4 text-center max-w-6xl font-light text-gray-500">
+          <p className="mt-4 text-xs md:text-base text-center max-w-sm md:max-w-6xl font-light text-gray-500">
             Launching a modern, simple, and beautiful loyalty program should be
             easy for businesses and enjoyable for customers. Gratitude makes
             that possible—giving your brand a central place to connect with
@@ -113,25 +113,29 @@ export default function HomePage() {
             use.
           </p>
 
-          <div className="mt-20 w-full">
-            <HowItWorksStepper steps={HOW_IT_WORKS} />
+          <div className="mt-10 md:mt-20 w-full">
+            <div className="block md:hidden">
+              <VerticalFlowStepper steps={HOW_IT_WORKS} />
+            </div>
+            <div className="hidden md:block">
+              <FlowStepper steps={HOW_IT_WORKS} />
+            </div>
           </div>
         </div>
       </div>
 
-      {/* Shift (Incomplete) */}
-      {/* TODO: Change background */}
-      <div className="w-full p-24 flex flex-col items-center bg-gray-50">
-        <p className="text-center max-w-4xl text-xl text-gray-700">
-          <span className="text-orange-300">Loyalty programs</span> haven’t evolved with modern digital commerce.
-          <span className="text-violet-300"> Gratitude</span> brings <span className="text-orange-300">rewards, engagement and retention</span> into one connected
+      {/* Shift */}
+      <div className="w-full p-12 md:p-24 flex flex-col items-center bg-gray-50">
+        <p className="text-center md:max-w-4xl md:text-xl text-gray-700">
+          <span className="font-medium">Loyalty programs</span> haven’t evolved with modern digital commerce.
+          <span className="font-medium"> Gratitude</span> brings <span className="font-medium">rewards, engagement and retention</span> into one connected
           experience.
         </p>
       </div>
 
       {/* Duality */}
-      <div className="w-full bg-white min-h-2/3 flex">
-        <div className="w-1/2 p-12 group relative overflow-hidden">
+      <div className="w-full bg-white min-h-2/3 flex flex-col gap-32 md:gap-0 md:flex-row">
+        <div className="w-full md:w-1/2 py-12 px-8 md:p-12 group relative overflow-hidden">
           <p className="text-5xl font-medium font-bodoni-moda">Consumers</p>
           <p
             className={cn(
@@ -161,20 +165,20 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="absolute -top-40 -right-20">
+          <div className="absolute -top-25 md:-top-40 -right-45 md:-right-20">
             <Image
               src="/hangtag-1.png"
               alt="hangtag"
-              width="600"
-              height="600"
-              className="saturate-0 group-hover:saturate-100"
+              width={600}
+              height={600}
+              className="md:w-150 md:h-150 w-100 h-100 saturate-0 group-hover:saturate-100"
             />
           </div>
         </div>
 
-        <div className="w-px bg-gray-200 my-10" />
+        <div className="hidden md:block w-px bg-gray-200 my-10" />
 
-        <div className="relative flex-1 flex flex-col items-end justify-end p-12 group overflow-hidden">
+        <div className="relative flex-1 flex flex-col items-end justify-end py-12 px-8 md:p-12 group overflow-hidden">
           <p
             className={cn(
               "text text-gray-500",
@@ -185,7 +189,7 @@ export default function HomePage() {
           </p>
           <p className="text-5xl font-medium font-bodoni-moda">Brands</p>
 
-          <div className="mt-8 flex justify-end w-xs flex-wrap gap-2">
+          <div className="z-10 mt-8 flex justify-end w-xs flex-wrap gap-2">
             {[
               "Retention",
               "Engagement",
@@ -205,80 +209,101 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="absolute -bottom-30 -left-5">
+          <div className="absolute z-0 -bottom-25 md:-bottom-30 -left-40 md:-left-5">
             <Image
               src="/tshirt.png"
               alt="hangtag"
-              width="550"
-              height="550"
-              className="saturate-0 group-hover:saturate-100"
+              width={600}
+              height={600}
+              className="md:w-150 md:h-150 w-100 h-100 saturate-0 group-hover:saturate-100"
             />
           </div>
         </div>
       </div>
 
       {/* Modules */}
-      <div className="w-full py-6 px-12 flex justify-center items-center bg-gray-50">
-        <div className="w-full p-12 bg-white rounded-lg flex flex-col items-center">
-          <p className="text-3xl font-medium font-bodoni-moda">
+      <div className="w-full py-6 px-6 md:px-12 flex justify-center items-center bg-gray-50">
+        <div className="w-full p-4 md:p-12 md:bg-white rounded-lg flex flex-col items-center">
+          <p className="text-2xl md:text-3xl font-medium font-bodoni-moda">
             Create with Gratitude
           </p>
-          
+
           <ModulesBento />
         </div>
       </div>
 
       {/* Signals */}
-      <div className="w-full min-h-1/3 p-8 bg-white flex flex-col items-center">
+      <div className="w-full min-h-1/3 p-8 bg-white flex flex-col items-center justify-center">
         <p className="text-xs text-gray-400 uppercase">Trust Signals</p>
         <RotatingTrustSignals items={TRUST_SIGNALS} />
       </div>
 
-      {/* Waitlist (Incomplete) */}
-      <div id="waiting-list" className="w-full p-16 bg-white">
-        <div className="flex justify-center items-center gap-2">
-          <Badge
-            role="button"
-            tabIndex={0}
-            variant={audience === "brand" ? "default" : "outline"}
-            className={cn(
-              "cursor-pointer text-sm font-light p-3",
-              audience === "brand"
-                ? "bg-violet-300 text-black"
-                : "border-violet-300 text-black",
-            )}
-            onClick={() => setAudience("brand")}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                setAudience("brand");
-              }
-            }}
-          >
-            Brand
-          </Badge>
-          <Badge
-            role="button"
-            tabIndex={0}
-            variant={audience === "consumer" ? "default" : "outline"}
-            className={cn(
-              "cursor-pointer text-sm font-light p-3",
-              audience === "consumer"
-                ? "bg-orange-300 text-black"
-                : "border-orange-300 text-black",
-            )}
-            onClick={() => setAudience("consumer")}
-            onKeyDown={(event) => {
-              if (event.key === "Enter" || event.key === " ") {
-                event.preventDefault();
-                setAudience("consumer");
-              }
-            }}
-          >
-            Consumer
-          </Badge>
-        </div>
-        <div className=" mt-12 w-full px-80">
+      {/* Waitlist */}
+      <div
+        id="waiting-list"
+        className="w-full py-16 md:p-16 bg-gray-50 relative overflow-hidden"
+        onMouseMove={(e) => {
+          const rect = e.currentTarget.getBoundingClientRect();
+          const x = e.clientX - rect.left;
+          const y = e.clientY - rect.top;
+          e.currentTarget.style.setProperty('--mouse-x', `${x}px`);
+          e.currentTarget.style.setProperty('--mouse-y', `${y}px`);
+        }}
+        style={{ '--mouse-x': '-9999px', '--mouse-y': '-9999px' } as React.CSSProperties}
+      >
+        <div
+          className="pointer-events-none absolute inset-0 bg-[linear-gradient(90deg,rgba(88,28,135,0.08)_1px,transparent_1px),linear-gradient(to_bottom,#fff,#f7f7f6)] bg-size-[2px_100%,100%_100%]"
+        ></div>
+        <div
+          className="pointer-events-none absolute inset-0 bg-gray-50"
+          style={{
+            maskImage: 'radial-gradient(circle 240px at var(--mouse-x) var(--mouse-y), transparent 0%, black 100%)',
+            WebkitMaskImage: 'radial-gradient(circle 240px at var(--mouse-x) var(--mouse-y), transparent 0%, black 100%)',
+          }}
+        ></div>
+        <div className="p-12 rounded-lg bg-white mx-6 md:mx-80 space-y-4 relative z-10">
+          <div className="flex justify-start items-center gap-2">
+            <Badge
+              role="button"
+              tabIndex={0}
+              variant={audience === "brand" ? "default" : "outline"}
+              className={cn(
+                "cursor-pointer text-sm font-light p-3",
+                audience === "brand"
+                  ? "bg-violet-300 text-black"
+                  : "border-violet-300 text-black",
+              )}
+              onClick={() => setAudience("brand")}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setAudience("brand");
+                }
+              }}
+            >
+              Brand
+            </Badge>
+            <Badge
+              role="button"
+              tabIndex={0}
+              variant={audience === "consumer" ? "default" : "outline"}
+              className={cn(
+                "cursor-pointer text-sm font-light p-3",
+                audience === "consumer"
+                  ? "bg-orange-300 text-black"
+                  : "border-orange-300 text-black",
+              )}
+              onClick={() => setAudience("consumer")}
+              onKeyDown={(event) => {
+                if (event.key === "Enter" || event.key === " ") {
+                  event.preventDefault();
+                  setAudience("consumer");
+                }
+              }}
+            >
+              Consumer
+            </Badge>
+          </div>
           <WaitlistForm />
         </div>
       </div>

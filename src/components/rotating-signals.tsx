@@ -24,7 +24,7 @@ export default function RotatingTrustSignals({ items }: { items: readonly string
     }, [items.length]);
 
     return (
-        <div className="relative mt-10 flex min-h-14 w-full max-w-xl items-center justify-center overflow-hidden">
+        <div className="relative mt-6 flex min-h-20 md:min-h-14 w-full max-w-xl items-center justify-center overflow-hidden">
             <AnimatePresence mode="wait">
                 <motion.p
                     key={items[index]}

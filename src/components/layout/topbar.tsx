@@ -1,5 +1,7 @@
 'use client'
 
+import { cn } from "@/lib/utils";
+
 export default function Topbar() {
   const handleClick = () => {
     document
@@ -8,11 +10,11 @@ export default function Topbar() {
   };
 
   return (
-    <div className="fixed top-0 z-50 flex w-full items-center justify-between bg-transparent p-4">
-      <p className="font-bodoni-moda text-xl font-medium">Gratitude</p>
+    <div className="fixed top-0 z-50 bg-linear-to-b from-neutral-200/50 to-transparent backdrop-blur-sm flex w-full items-center justify-between p-4">
+      <p className="font-bodoni-moda md:text-xl font-medium">Gratitude</p>
       <button
         type="button"
-        className="cursor-pointer font-bodoni-moda text-xl font-medium transition-opacity hover:opacity-70"
+        className={cn("cursor-pointer font-bodoni-moda md:text-xl font-medium transition-opacity hover:opacity-70")}
         onClick={handleClick}
       >
         / waiting-list

@@ -15,7 +15,7 @@ import {
 
 export function CampaignsContent() {
   return (
-    <div className="relative w-full translate-x-1/10 h-[320px]">
+    <div className="relative w-full scale-75 md:scale-100 origin-left -translate-x-1/20 md:translate-x-1/14 h-[320px]">
       <style>{`
                 @keyframes path-flow {
                     from {
@@ -61,9 +61,19 @@ export function CampaignsContent() {
           className="path-flow-animated"
         />
 
-        {/* Arrow 2: Customize -> Launch */}
+        {/* Arrow 2: Customize -> Launch (curved, desktop only) */}
         <path
           d="M 430 42.5 C 480 42.5, 480 152.5, 438 152.5"
+          fill="none"
+          stroke="#c4b5fd"
+          strokeWidth="2"
+          markerEnd="url(#arrowhead)"
+          className="path-flow-animated"
+        />
+
+        {/* Arrow 2 (mobile): Customize -> Launch (straight down) */}
+        <path
+          d="M 370 65 L 370 120"
           fill="none"
           stroke="#c4b5fd"
           strokeWidth="2"
@@ -116,7 +126,7 @@ export function TemplatesContent() {
         <Badge
           key={template}
           className={cn(
-            "p-3 text-sm rounded-xl bg-transparent text-black border border-orange-300 cursor-pointer",
+            "p-3 text-xs md:text-sm rounded-xl bg-transparent text-black border border-orange-300 cursor-pointer",
             "hover:h-10 hover:rounded-lg",
             "transition-all duration-300",
           )}
@@ -124,7 +134,7 @@ export function TemplatesContent() {
           {template}
         </Badge>
       ))}
-      <Badge className="p-3 text-sm rounded-full bg-transparent text-black border-dashed border-orange-300 cursor-pointer">
+      <Badge className="p-3 text-xs md:text-sm rounded-full bg-transparent text-black border-dashed border-orange-300 cursor-pointer">
         More
       </Badge>
     </div>
@@ -135,13 +145,13 @@ export function BYOTContent() {
   return (
     <div className="max-w-md grid grid-cols-3 grid-rows-2 gap-y-4">
       <div className="col-start-1 min-w-44 flex items-center justify-between p-3 rounded-lg border border-violet-300 relative">
-        <p className="ml-1">Audience</p>
+        <p className="ml-1 text-sm">Audience</p>
         <Combobox>
           <ComboboxTrigger className="border-l pl-2" />
           <ComboboxContent className="min-w-44">
             <ComboboxList>
-              <ComboboxItem className="p-2">New customers</ComboboxItem>
-              <ComboboxItem className="p-2">VIP customers</ComboboxItem>
+              <ComboboxItem className="p-2 text-sm">New customers</ComboboxItem>
+              <ComboboxItem className="p-2 text-sm">VIP customers</ComboboxItem>
             </ComboboxList>
           </ComboboxContent>
         </Combobox>
@@ -150,14 +160,14 @@ export function BYOTContent() {
         </div>
       </div>
 
-      <div className="col-start-3 row-start-2 min-w-44 flex items-center justify-between p-3 rounded-lg border border-orange-300 relative">
-        <p className="ml-1">Reward Type</p>
+      <div className="col-start-2 md:col-start-3 row-start-2 min-w-44 flex items-center justify-between p-3 rounded-lg border border-orange-300 relative">
+        <p className="ml-1 text-sm">Reward Type</p>
         <Combobox>
           <ComboboxTrigger className="border-l pl-2" />
           <ComboboxContent className="min-w-44">
             <ComboboxList>
-              <ComboboxItem className="p-2">Points</ComboboxItem>
-              <ComboboxItem className="p-2">Cashback</ComboboxItem>
+              <ComboboxItem className="p-2 text-sm">Points</ComboboxItem>
+              <ComboboxItem className="p-2 text-sm">Cashback</ComboboxItem>
             </ComboboxList>
           </ComboboxContent>
         </Combobox>
@@ -388,7 +398,7 @@ export function TrackContent() {
   return (
     <div
       key={key}
-      className="relative flex h-[320px] w-[400px] items-center justify-center"
+      className="relative flex h-[320px] md:w-[400px] items-center justify-center"
     >
       <svg className="h-full w-full" viewBox={`0 0 ${TRACK_VIEW_WIDTH} ${TRACK_VIEW_HEIGHT}`}>
         <title>Network spread growth</title>

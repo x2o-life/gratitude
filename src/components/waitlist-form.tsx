@@ -18,26 +18,49 @@ import {
   useWaitlistStore,
   type WaitlistAudience,
 } from "@/stores/waitlist-store";
+import { Check } from "lucide-react";
+import { cn } from "@/lib/utils";
 
-const formTitles: Record<WaitlistAudience, string> = {
-  brand: "Partner with us",
-  consumer: "Join the waitlist",
+const formTitles: Record<WaitlistAudience, { title: string; description: string }> = {
+  brand: {
+    title: "Partner with us",
+    description: "Register now to start building a loyalty program that works with your brand",
+  },
+  consumer: {
+    title: "Join the waitlist",
+    description: "Sign up to get early access and start using Gratitude for free",
+  },
 };
 
 function WaitlistFormTitle({ audience }: { audience: WaitlistAudience }) {
+  const { title, description } = formTitles[audience];
   return (
-    <h3 className="mb-4 font-bodoni-moda text-3xl font-medium text-center">
-      {formTitles[audience]}
-    </h3>
+    <div className="mb-8">
+      <h3 className="font-bodoni-moda text-3xl font-medium">
+        {title}
+      </h3>
+      <p className="text-sm text-gray-500 font-light">
+        {description}
+      </p>
+    </div>
   );
 }
 
-function WaitlistSuccessMessage() {
+function WaitlistSuccessMessage({ audience }: { audience: WaitlistAudience }) {
   return (
     <div className="flex flex-1 flex-col justify-center py-6">
-      <p className="font-bodoni-moda text-3xl font-medium">Thank you</p>
+      <div className="flex items-center gap-2">
+        <div className={cn("p-1 rounded-full",
+          audience === "brand" ? "bg-violet-300" : "bg-orange-300"
+        )}>
+          <Check />
+        </div>
+        <p className="font-bodoni-moda text-3xl font-medium">Thank you</p>
+      </div>
       <p className="mt-2 text-muted-foreground leading-relaxed">
-        We&apos;ll be in touch.
+        {audience === "brand"
+          ? "We'll let you know when it's time to build your loyalty program."
+          : "We'll let you know when it's time to get early access to Gratitude."}
       </p>
     </div>
   );
@@ -291,12 +314,12 @@ export default function WaitlistForm() {
 
   useEffect(() => {
     setSubmitSuccess(false);
-  }, []);
+  }, [audience]);
 
   return (
     <div className="flex flex-1 flex-col justify-center">
       {submitSuccess ? (
-        <WaitlistSuccessMessage />
+        <WaitlistSuccessMessage audience={audience} />
       ) : (
         <>
           <WaitlistFormTitle audience={audience} />
