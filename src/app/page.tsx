@@ -145,17 +145,17 @@ export default function HomePage() {
             consumersInView.inView && "in-view",
           )}
         >
-          <p className="text-5xl font-medium font-bodoni-moda">Consumers</p>
+          <p className="z-10 text-5xl font-medium font-bodoni-moda">Consumers</p>
           <p
             className={cn(
-              "text text-gray-500 transition-colors duration-400",
+              "z-10 text text-gray-500 transition-colors duration-400",
               "max-md:group-[.in-view]:text-orange-300 md:group-hover:text-orange-300",
             )}
           >
             get connected
           </p>
 
-          <div className="mt-8 flex w-xs flex-wrap gap-2">
+          <div className="z-10 mt-8 flex w-xs flex-wrap gap-2">
             {[
               "Unified Rewards",
               "Easy Redemption",
@@ -175,7 +175,7 @@ export default function HomePage() {
             ))}
           </div>
 
-          <div className="absolute -top-25 md:-top-40 -right-45 md:-right-20">
+          <div className="z-0 absolute -top-25 md:-top-40 -right-45 md:-right-20">
             <Image
               src="/hangtag-1.png"
               alt="hangtag"
@@ -197,13 +197,13 @@ export default function HomePage() {
         >
           <p
             className={cn(
-              "text text-gray-500 transition-colors duration-400",
+              "z-10 text text-gray-500 transition-colors duration-400",
               "max-md:group-[.in-view]:text-violet-300 md:group-hover:text-violet-300",
             )}
           >
             to their favourite
           </p>
-          <p className="text-5xl font-medium font-bodoni-moda">Brands</p>
+          <p className="z-10 text-5xl font-medium font-bodoni-moda">Brands</p>
 
           <div className="z-10 mt-8 flex w-xs flex-wrap justify-end gap-2">
             {[

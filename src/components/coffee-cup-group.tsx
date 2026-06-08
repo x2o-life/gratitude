@@ -137,9 +137,9 @@ function FeaturedFrontRightCup() {
           className="h-auto md:w-200 saturate-120"
         />
       </div>
-      <div className="absolute md:top-[35%] top-20 left-1/2 z-30 translate-x-[-75%] md:-translate-x-1/2 -rotate-10">
-        <span className="bg-violet-300 px-6 py-4 text-2xl font-bodoni-moda font-bold tracking-wide text-black uppercase">
-          free
+      <div className="absolute md:top-[35%] top-20 left-1/2 z-30 translate-x-[-75%] md:-translate-x-1/2 -rotate-10 px-6 py-4 bg-violet-300 text-center">
+        <span className="text-lg md:text-2xl font-bodoni-moda font-bold tracking-wide text-black uppercase">
+          5th Coffee is on us
         </span>
       </div>
     </div>
