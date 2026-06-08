@@ -100,6 +100,16 @@ export function CampaignsContent() {
   );
 }
 
+export function CampaignsContent02() {
+  return (
+    <div className="flex items-center justify-center gap-2">
+      <div className="rounded-lg p-2 flex items-center justify-center border-2 border-violet-300">Template</div>
+      <div className="rounded-lg p-2 flex items-center justify-center border-2 border-orange-300">Launch</div>
+      <div className="rounded-lg p-2 flex items-center justify-center border-2 border-violet-300">Track</div>
+    </div>
+  )
+}
+
 export function TemplatesContent() {
   const TEMPLATES = [
     "Points & Rewards",
@@ -151,7 +161,7 @@ export function BYOTContent() {
         </div>
       </div>
 
-      <div className="col-start-2 md:col-start-3 row-start-2 min-w-44 flex items-center justify-between p-3 rounded-lg border border-orange-300 relative">
+      <div className="col-start-3 row-start-2 place-self-end min-w-44 flex items-center justify-between p-3 rounded-lg border border-orange-300 relative">
         <p className="ml-1 text-sm">Reward Type</p>
         <Combobox>
           <ComboboxTrigger className="border-l pl-2" />

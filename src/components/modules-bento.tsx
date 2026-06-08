@@ -1,11 +1,11 @@
-import { BYOTContent, CampaignsContent, TemplatesContent, TrackContent } from "./modules-content";
+import { BYOTContent, CampaignsContent, CampaignsContent02, TemplatesContent, TrackContent } from "./modules-content";
 
 export default function ModulesBento() {
     return (
         <div className="mt-12 w-full grid md:grid-cols-2 gap-4 md:gap-8">
             <div className="bg-white row-span-3 md:row-start-1 flex min-h-100 md:min-h-80 flex-col rounded-lg shadow-sm md:shadow-none md:border p-4 hover:shadow-md transition-shadow duration-300">
                 <div className="flex min-h-0 flex-1 items-center justify-center">
-                    <CampaignsContent />
+                    <CampaignsContent02 />
                 </div>
                 <div className="mt-4 shrink-0 flex flex-col gap-1">
                     <p className="text-lg font-medium font-bodoni-moda">Launch Campaigns in minutes</p>
