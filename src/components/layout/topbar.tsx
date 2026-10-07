@@ -1,24 +1,74 @@
-'use client'
+"use client";
 
+import { ArrowRight } from "lucide-react";
+import Image from "next/image";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 
+const LINKS = [
+  { href: "#how-it-works", label: "How it works" },
+  { href: "#for-you", label: "For you" },
+  { href: "#for-brands", label: "For brands" },
+  { href: "#questions", label: "Questions" },
+];
+
 export default function Topbar() {
-  const handleClick = () => {
-    document
-      .getElementById("waiting-list")
-      ?.scrollIntoView({ behavior: "smooth" });
-  };
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 24);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   return (
-    <div className="fixed top-0 z-50 bg-linear-to-b from-neutral-200/50 to-transparent backdrop-blur-sm flex w-full items-center justify-between p-4">
-      <p className="font-bodoni-moda md:text-xl font-medium">Gratitude</p>
-      <button
-        type="button"
-        className={cn("cursor-pointer font-bodoni-moda md:text-xl font-medium transition-opacity hover:opacity-70")}
-        onClick={handleClick}
+    <header className="fixed inset-x-0 top-0 z-50 flex justify-center px-3 pt-3 md:px-6">
+      <nav
+        className={cn(
+          "flex w-full max-w-6xl items-center justify-between gap-4 rounded-full py-1.5 pr-1.5 pl-2.5 transition-all duration-300",
+          scrolled
+            ? "sticker-sm bg-white/95 backdrop-blur"
+            : "border-2 border-transparent",
+        )}
       >
-        / waiting-list
-      </button>
-    </div>
+        <a
+          href="#top"
+          className="flex items-center gap-2 font-serif text-2xl leading-none tracking-tight"
+        >
+          <Image
+            src="/gratitude-white.svg"
+            alt=""
+            width={338}
+            height={349}
+            loading="eager"
+            className="h-8 w-auto"
+          />
+          Gratitude
+        </a>
+
+        <div className="hidden items-center gap-1 md:flex">
+          {LINKS.map((link) => (
+            <a
+              key={link.href}
+              href={link.href}
+              className="rounded-full px-3 py-1.5 text-sm text-muted-foreground transition-colors hover:bg-pass-wash hover:text-ink"
+            >
+              {link.label}
+            </a>
+          ))}
+        </div>
+
+        <a
+          href="#waiting-list"
+          className="group inline-flex h-10 items-center gap-3 rounded-full bg-ink pr-1 pl-4 text-sm text-white"
+        >
+          Join the waitlist
+          <span className="flex size-8 items-center justify-center rounded-full bg-pass text-ink transition-transform group-hover:-rotate-12">
+            <ArrowRight className="size-4" />
+          </span>
+        </a>
+      </nav>
+    </header>
   );
 }

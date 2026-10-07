@@ -1,10 +1,12 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { useEffect, useState } from "react";
+import { motion } from "framer-motion";
+import { ArrowRight, Check, Store } from "lucide-react";
+import { useState } from "react";
 import { Controller, useForm } from "react-hook-form";
 import * as z from "zod";
-import { Button } from "@/components/ui/button";
+import { MonoLabel, PillButton, Sparkle } from "@/components/home/kit";
 import {
   Field,
   FieldError,
@@ -13,58 +15,92 @@ import {
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
 import { submitWaitlistEntry } from "@/lib/firebase/waitlist";
+import { cn } from "@/lib/utils";
 import {
   selectWaitlistAudience,
   useWaitlistStore,
   type WaitlistAudience,
 } from "@/stores/waitlist-store";
-import { Check } from "lucide-react";
-import { cn } from "@/lib/utils";
 
-const formTitles: Record<WaitlistAudience, { title: string; description: string }> = {
+const formTitles: Record<
+  WaitlistAudience,
+  { title: string; description: string }
+> = {
   brand: {
-    title: "Partner with us",
-    description: "Register now to start building a loyalty program that works with your brand",
+    title: "Partner with <em>Gratitude</em>",
+    description:
+      "Tell us about your business. We'll help you launch your first campaign.",
   },
   consumer: {
-    title: "Join the waitlist",
-    description: "Sign up to get early access and start using Gratitude for free",
+    title: "Get <em>early</em> access",
+    description:
+      "Be first to know when Gratitude opens near you. Free for people who shop.",
   },
 };
 
 function WaitlistFormTitle({ audience }: { audience: WaitlistAudience }) {
   const { title, description } = formTitles[audience];
+  const [before, emphasis, after] = title.split(/<em>|<\/em>/);
   return (
-    <div className="mb-8">
-      <h3 className="font-bodoni-moda text-3xl font-medium">
-        {title}
+    <div className="mb-6">
+      <h3
+        className={cn(
+          "font-normal font-serif text-4xl leading-none tracking-tight md:text-5xl",
+          audience === "brand"
+            ? "[&_em]:text-studio-strong"
+            : "[&_em]:text-pass-strong",
+        )}
+      >
+        {before}
+        <em>{emphasis}</em>
+        {after}
       </h3>
-      <p className="text-sm text-gray-500 font-light">
-        {description}
-      </p>
+      <p className="mt-2 text-sm text-muted-foreground">{description}</p>
     </div>
   );
 }
 
+/** The peak-end moment: a sealed card that peels open. */
 function WaitlistSuccessMessage({ audience }: { audience: WaitlistAudience }) {
+  const accent = audience === "brand" ? "var(--studio)" : "var(--pass)";
   return (
-    <div className="flex flex-1 flex-col justify-center py-6">
-      <div className="flex items-center gap-2">
-        <div className={cn("p-1 rounded-full",
-          audience === "brand" ? "bg-violet-300" : "bg-orange-300"
-        )}>
-          <Check />
+    <div className="relative flex flex-1 flex-col justify-center py-6">
+      <motion.div
+        initial={{ rotateX: 0, opacity: 1 }}
+        animate={{ rotateX: -110, opacity: 0 }}
+        transition={{ delay: 0.25, duration: 0.6, ease: "easeIn" }}
+        style={{ transformOrigin: "top", backgroundColor: accent }}
+        className="pointer-events-none absolute inset-0 z-10 flex items-center justify-center rounded-2xl border-2 border-ink"
+      >
+        <MonoLabel className="text-ink">Sealed for you</MonoLabel>
+      </motion.div>
+      <motion.div
+        initial={{ scale: 0.9, opacity: 0 }}
+        animate={{ scale: 1, opacity: 1 }}
+        transition={{ delay: 0.6, type: "spring", damping: 14 }}
+      >
+        <div className="flex items-center gap-3">
+          <span
+            className="flex size-10 items-center justify-center rounded-full border-2 border-ink"
+            style={{ backgroundColor: accent }}
+          >
+            <Check className="size-5" />
+          </span>
+          <p className="font-serif text-5xl leading-none">You&apos;re in.</p>
+          <Sparkle className="size-7" />
         </div>
-        <p className="font-bodoni-moda text-3xl font-medium">Thank you</p>
-      </div>
-      <p className="mt-2 text-muted-foreground leading-relaxed">
-        {audience === "brand"
-          ? "We'll let you know when it's time to build your loyalty program."
-          : "We'll let you know when it's time to get early access to Gratitude."}
-      </p>
+        <p className="mt-4 max-w-sm text-muted-foreground">
+          {audience === "brand"
+            ? "We'll reach out to set up your first campaign with you."
+            : "We'll let you know the moment Gratitude opens near you."}
+        </p>
+      </motion.div>
     </div>
   );
 }
+
+const FIELD =
+  "h-11 rounded-xl border-2 border-ink/15 bg-white px-3 shadow-none focus-visible:border-ink focus-visible:ring-0";
 
 const brandFormSchema = z.object({
   name: z.string().min(1, "Name is required."),
@@ -128,10 +164,11 @@ function BrandWaitlistForm({ onSuccess }: WaitlistFormProps) {
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="waitlist-brand-name">Name</FieldLabel>
               <Input
+                className={FIELD}
                 {...field}
                 id="waitlist-brand-name"
                 autoComplete="name"
-                placeholder="Jane Smith"
+                placeholder="Mike Perera"
                 aria-invalid={fieldState.invalid}
                 disabled={isSubmitting}
               />
@@ -147,11 +184,12 @@ function BrandWaitlistForm({ onSuccess }: WaitlistFormProps) {
               <Field data-invalid={fieldState.invalid}>
                 <FieldLabel htmlFor="waitlist-brand-phone">Phone</FieldLabel>
                 <Input
+                  className={FIELD}
                   {...field}
                   id="waitlist-brand-phone"
                   type="tel"
                   autoComplete="tel"
-                  placeholder="+1 (555) 000-0000"
+                  placeholder="+94 77 123 4567"
                   aria-invalid={fieldState.invalid}
                   disabled={isSubmitting}
                 />
@@ -170,11 +208,12 @@ function BrandWaitlistForm({ onSuccess }: WaitlistFormProps) {
                   Work email
                 </FieldLabel>
                 <Input
+                  className={FIELD}
                   {...field}
                   id="waitlist-brand-email"
                   type="email"
                   autoComplete="email"
-                  placeholder="you@company.com"
+                  placeholder="you@business.lk"
                   aria-invalid={fieldState.invalid}
                   disabled={isSubmitting}
                 />
@@ -192,10 +231,11 @@ function BrandWaitlistForm({ onSuccess }: WaitlistFormProps) {
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="waitlist-brand-company">Company</FieldLabel>
               <Input
+                className={FIELD}
                 {...field}
                 id="waitlist-brand-company"
                 autoComplete="organization"
-                placeholder="Acme Coffee Co."
+                placeholder="Brew Lab"
                 aria-invalid={fieldState.invalid}
                 disabled={isSubmitting}
               />
@@ -208,13 +248,14 @@ function BrandWaitlistForm({ onSuccess }: WaitlistFormProps) {
         <p className="mt-3 text-sm text-destructive">{submitError}</p>
       )}
       <Field orientation="horizontal" className="mt-4 justify-end">
-        <Button
+        <PillButton
           type="submit"
           disabled={isSubmitting}
-          className="shrink-0 bg-violet-300 text-black hover:bg-gray-900 hover:text-white"
+          accent="var(--studio)"
+          icon={<Store />}
         >
-          {isSubmitting ? "Submitting..." : "Request access"}
-        </Button>
+          {isSubmitting ? "Sending..." : "Request a call"}
+        </PillButton>
       </Field>
     </form>
   );
@@ -261,10 +302,11 @@ function ConsumerWaitlistForm({ onSuccess }: WaitlistFormProps) {
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="waitlist-consumer-name">Name</FieldLabel>
               <Input
+                className={FIELD}
                 {...field}
                 id="waitlist-consumer-name"
                 autoComplete="name"
-                placeholder="Jane Smith"
+                placeholder="Mike Perera"
                 aria-invalid={fieldState.invalid}
                 disabled={isSubmitting}
               />
@@ -279,6 +321,7 @@ function ConsumerWaitlistForm({ onSuccess }: WaitlistFormProps) {
             <Field data-invalid={fieldState.invalid}>
               <FieldLabel htmlFor="waitlist-consumer-email">Email</FieldLabel>
               <Input
+                className={FIELD}
                 {...field}
                 id="waitlist-consumer-email"
                 type="email"
@@ -296,13 +339,14 @@ function ConsumerWaitlistForm({ onSuccess }: WaitlistFormProps) {
         <p className="mt-3 text-sm text-destructive">{submitError}</p>
       )}
       <Field orientation="horizontal" className="mt-4 justify-end">
-        <Button
+        <PillButton
           type="submit"
           disabled={isSubmitting}
-          className="shrink-0 bg-orange-300 text-black hover:bg-gray-900 hover:text-white"
+          accent="var(--pass)"
+          icon={<ArrowRight />}
         >
-          {isSubmitting ? "Submitting..." : "Get early access"}
-        </Button>
+          {isSubmitting ? "Sending..." : "Get early access"}
+        </PillButton>
       </Field>
     </form>
   );
@@ -311,10 +355,6 @@ function ConsumerWaitlistForm({ onSuccess }: WaitlistFormProps) {
 export default function WaitlistForm() {
   const audience = useWaitlistStore(selectWaitlistAudience);
   const [submitSuccess, setSubmitSuccess] = useState(false);
-
-  useEffect(() => {
-    setSubmitSuccess(false);
-  }, [audience]);
 
   return (
     <div className="flex flex-1 flex-col justify-center">
