@@ -8,7 +8,7 @@ import {
   useTransform,
 } from "framer-motion";
 import { Check, Phone, Pointer, RotateCcw, Store } from "lucide-react";
-import { type ReactNode, useEffect, useState } from "react";
+import { type ReactNode, useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import {
   MonoLabel,
@@ -75,19 +75,47 @@ export default function CounterMoment() {
 
   const completes = stamps + 1 >= CARD_SIZE;
 
+  // Phones stack the two screens, so they show one side at a time and hop to
+  // whichever side reacts next. Desktop shows both and ignores `side`.
+  const isSmall = useIsSmallScreen();
+  const [side, setSide] = useState<Side>("customer");
+  const stageRef = useRef<HTMLDivElement>(null);
+
+  function showSide(next: Side) {
+    setSide(next);
+    stageRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
+  }
+
+  /** On phones: switch sides, then run `change` once the new side is visible. */
+  function after(next: Side, delay: number, change: () => void) {
+    if (!isSmall) return change();
+    showSide(next);
+    window.setTimeout(change, delay);
+  }
+
+  function giveNumber() {
+    setStep("found");
+    // Let the tap land on the phone before moving to the counter.
+    if (isSmall) window.setTimeout(() => showSide("shop"), 700);
+  }
+
   function confirm() {
     if (bill === null) return;
     const gained = pointsFor(bill);
-    setPoints((p) => p + gained);
-    setStamps((s) => (s + 1 >= CARD_SIZE ? 0 : s + 1));
-    setEarned({ points: gained, reward: completes });
-    setStep("done");
+    // Switch first, so the stamp and points land in view.
+    after("customer", 350, () => {
+      setPoints((p) => p + gained);
+      setStamps((s) => (s + 1 >= CARD_SIZE ? 0 : s + 1));
+      setEarned({ points: gained, reward: completes });
+      setStep("done");
+    });
   }
 
   function nextVisit() {
     setBill(null);
     setEarned(null);
     setStep("idle");
+    if (isSmall) showSide("customer");
   }
 
   function reset() {
@@ -95,6 +123,10 @@ export default function CounterMoment() {
     setStamps(6);
     setPoints(140);
   }
+
+  /** Whose move it is, so the other tab can call for attention. */
+  const turn: Side =
+    step === "found" || step === "billed" ? "shop" : "customer";
 
   const activeIndex =
     step === "done" ? 3 : STEPS.findIndex((s) => s.key === step);
@@ -113,7 +145,7 @@ export default function CounterMoment() {
           </SerifTitle>
           <p className="mt-4 max-w-xl text-pretty text-muted-foreground">
             This is the whole of Gratitude. You&apos;re at Brew Lab, a café.
-            Play both parts: the customer on the left, the shop on the right.
+            Play both parts: the customer and the shop.
           </p>
         </div>
 
@@ -141,10 +173,20 @@ export default function CounterMoment() {
           ))}
         </ol>
 
-        <div className="mt-10 grid items-center gap-10 md:grid-cols-2 md:gap-6">
+        <SideSwitch side={side} turn={turn} onChange={showSide} />
+
+        <div
+          ref={stageRef}
+          className="mt-6 grid scroll-mt-24 items-center gap-10 md:mt-10 md:grid-cols-2 md:gap-6"
+        >
           {/* The customer */}
-          <div className="flex flex-col items-center gap-4">
-            <MonoLabel className="flex items-center gap-2">
+          <div
+            className={cn(
+              "flex flex-col items-center gap-4 max-md:animate-in max-md:fade-in max-md:slide-in-from-left-4 max-md:duration-300",
+              side !== "customer" && "max-md:hidden",
+            )}
+          >
+            <MonoLabel className="flex items-center gap-2 max-md:hidden">
               <span className="size-2 rounded-full bg-pass" /> The customer
             </MonoLabel>
             <PassPhone className="h-[520px]">
@@ -153,14 +195,30 @@ export default function CounterMoment() {
                 stamps={stamps}
                 points={points}
                 earned={earned}
-                onGiveNumber={() => setStep("found")}
+                onGiveNumber={giveNumber}
               />
             </PassPhone>
+            {step === "done" && (
+              <PillButton
+                accent="var(--studio)"
+                icon={<Store />}
+                onClick={nextVisit}
+                className="relative md:hidden"
+              >
+                Next visit
+                <TapHint />
+              </PillButton>
+            )}
           </div>
 
           {/* The shop */}
-          <div className="flex flex-col items-center gap-4">
-            <MonoLabel className="flex items-center gap-2">
+          <div
+            className={cn(
+              "flex flex-col items-center gap-4 max-md:animate-in max-md:fade-in max-md:slide-in-from-right-4 max-md:duration-300",
+              side !== "shop" && "max-md:hidden",
+            )}
+          >
+            <MonoLabel className="flex items-center gap-2 max-md:hidden">
               <span className="size-2 rounded-full bg-studio" /> The shop
             </MonoLabel>
             <div className="sticker w-full max-w-md rounded-3xl bg-white">
@@ -190,14 +248,17 @@ export default function CounterMoment() {
                 />
               </div>
             </div>
-            <button
-              type="button"
-              onClick={reset}
-              className="inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1 text-xs text-muted-foreground hover:text-ink"
-            >
-              <RotateCcw className="size-3" /> Start over
-            </button>
           </div>
+        </div>
+
+        <div className="mt-4 flex justify-center">
+          <button
+            type="button"
+            onClick={reset}
+            className="inline-flex cursor-pointer items-center gap-1.5 rounded-full px-3 py-1 text-xs text-muted-foreground hover:text-ink"
+          >
+            <RotateCcw className="size-3" /> Start over
+          </button>
         </div>
 
         <p className="mt-8 text-center text-xs text-muted-foreground">
@@ -209,6 +270,81 @@ export default function CounterMoment() {
       <StepToast show={trySection.inView} step={step} />
     </section>
   );
+}
+
+type Side = "customer" | "shop";
+
+const SIDES: { key: Side; label: string; dot: string }[] = [
+  { key: "customer", label: "The customer", dot: "bg-pass" },
+  { key: "shop", label: "The shop", dot: "bg-studio" },
+];
+
+/** Phones only: flip between the two screens. The side whose move it is pulses. */
+function SideSwitch({
+  side,
+  turn,
+  onChange,
+}: {
+  side: Side;
+  turn: Side;
+  onChange: (side: Side) => void;
+}) {
+  return (
+    <div
+      role="tablist"
+      aria-label="Whose screen"
+      className="mx-auto mt-8 flex w-fit rounded-full border-2 border-ink bg-white p-1 md:hidden"
+    >
+      {SIDES.map(({ key, label, dot }) => {
+        const active = side === key;
+        return (
+          <button
+            key={key}
+            type="button"
+            role="tab"
+            aria-selected={active}
+            onClick={() => onChange(key)}
+            className="relative flex cursor-pointer items-center gap-2 rounded-full px-4 py-1.5 text-xs"
+          >
+            {active && (
+              <motion.span
+                layoutId="side-switch"
+                className="absolute inset-0 rounded-full bg-ink"
+                transition={{ type: "spring", stiffness: 420, damping: 34 }}
+              />
+            )}
+            <span className="relative flex size-2">
+              {!active && turn === key && (
+                <span
+                  className={cn(
+                    "absolute inset-0 animate-ping rounded-full",
+                    dot,
+                  )}
+                />
+              )}
+              <span className={cn("relative size-2 rounded-full", dot)} />
+            </span>
+            <span className={cn("relative", active && "text-white")}>
+              {label}
+            </span>
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/** Below the `md` breakpoint, where the two screens stack. */
+function useIsSmallScreen() {
+  const [small, setSmall] = useState(false);
+  useEffect(() => {
+    const query = window.matchMedia("(max-width: 767px)");
+    const update = () => setSmall(query.matches);
+    update();
+    query.addEventListener("change", update);
+    return () => query.removeEventListener("change", update);
+  }, []);
+  return small;
 }
 
 /**
@@ -469,7 +605,7 @@ function ShopScreen({
     >
       <div className="flex items-center justify-between rounded-2xl border-2 border-ink bg-studio-soft px-4 py-3">
         <div>
-          <p className="text-sm font-semibold">Mike P.</p>
+          <p className="text-sm font-semibold">Mike</p>
           <p className="font-mono text-[10px] uppercase tracking-wider text-muted-foreground">
             077 ••• 4567 · regular
           </p>

@@ -169,7 +169,7 @@ function BrandWaitlistForm({ onSuccess }: WaitlistFormProps) {
                 {...field}
                 id="waitlist-brand-name"
                 autoComplete="name"
-                placeholder="Mike Perera"
+                placeholder="Mike"
                 aria-invalid={fieldState.invalid}
                 disabled={isSubmitting}
               />
@@ -308,7 +308,7 @@ function ConsumerWaitlistForm({ onSuccess }: WaitlistFormProps) {
                 {...field}
                 id="waitlist-consumer-name"
                 autoComplete="name"
-                placeholder="Mike Perera"
+                placeholder="Mike"
                 aria-invalid={fieldState.invalid}
                 disabled={isSubmitting}
               />
