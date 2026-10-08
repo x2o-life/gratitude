@@ -5,6 +5,7 @@ import PileToPass from "@/components/home/pile-to-pass";
 import Questions from "@/components/home/questions";
 import TwoDoors from "@/components/home/two-doors";
 import WhyOnePass from "@/components/home/why-one-pass";
+import { faqJsonLd, JsonLd } from "@/components/seo/json-ld";
 
 /**
  * The page's arc: the promise → the problem (a pile of loyalty cards) → the whole product in
@@ -14,6 +15,7 @@ import WhyOnePass from "@/components/home/why-one-pass";
 export default function HomePage() {
   return (
     <div className="relative w-full overflow-x-clip">
+      <JsonLd data={faqJsonLd} />
       <Hero />
       <PileToPass />
       <CounterMoment />

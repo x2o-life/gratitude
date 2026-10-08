@@ -10,6 +10,7 @@ import {
 import { Pointer } from "lucide-react";
 import type { ComponentProps, ReactNode } from "react";
 import { useEffect, useRef } from "react";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 import {
   useWaitlistStore,
@@ -154,7 +155,8 @@ export function useTrySection<T extends HTMLElement>() {
 /** Set the waitlist audience and scroll to the form. */
 export function useJoin() {
   const setAudience = useWaitlistStore((store) => store.setAudience);
-  return (audience: WaitlistAudience) => {
+  return (audience: WaitlistAudience, location = "two_doors") => {
+    track("waitlist_cta_click", { audience, location });
     setAudience(audience);
     document
       .getElementById("waiting-list")

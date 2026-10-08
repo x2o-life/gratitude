@@ -3,13 +3,14 @@
 import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import { useEffect, useState } from "react";
+import { track } from "@/lib/analytics";
 import { cn } from "@/lib/utils";
 
 const LINKS = [
-  { href: "#how-it-works", label: "How it works" },
-  { href: "#for-you", label: "For you" },
-  { href: "#for-brands", label: "For brands" },
-  { href: "#questions", label: "Questions" },
+  { href: "/#how-it-works", label: "How it works" },
+  { href: "/#for-you", label: "For you" },
+  { href: "/#for-brands", label: "For brands" },
+  { href: "/#questions", label: "Questions" },
 ];
 
 export default function Topbar() {
@@ -33,7 +34,7 @@ export default function Topbar() {
         )}
       >
         <a
-          href="#top"
+          href="/#top"
           className="flex items-center gap-2 font-serif text-2xl leading-none tracking-tight"
         >
           <Image
@@ -59,8 +60,10 @@ export default function Topbar() {
           ))}
         </div>
 
+        {/* biome-ignore lint/a11y/useValidAnchor: real link; onClick only records the click */}
         <a
-          href="#waiting-list"
+          href="/#waiting-list"
+          onClick={() => track("waitlist_cta_click", { location: "topbar" })}
           className="group inline-flex h-10 items-center gap-3 rounded-full bg-ink pr-1 pl-4 text-sm text-white"
         >
           Join the waitlist

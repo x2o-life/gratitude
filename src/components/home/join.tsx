@@ -1,6 +1,9 @@
 "use client";
 
+import Link from "next/link";
 import WaitlistForm from "@/components/waitlist-form";
+import { track } from "@/lib/analytics";
+import { SITE } from "@/lib/site";
 import { cn } from "@/lib/utils";
 import {
   selectWaitlistAudience,
@@ -39,7 +42,13 @@ export default function Join() {
               type="button"
               role="radio"
               aria-checked={audience === option.value}
-              onClick={() => setAudience(option.value)}
+              onClick={() => {
+                setAudience(option.value);
+                track("select_audience", {
+                  audience: option.value,
+                  location: "waitlist_toggle",
+                });
+              }}
               className={cn(
                 "cursor-pointer rounded-full px-4 py-1.5 text-sm transition-colors",
                 audience === option.value
@@ -78,9 +87,28 @@ export function Footer() {
             Gratitude by <span className="text-white">x2o Life</span> © 2026.
             All rights reserved.
           </p>
-          <p className="font-mono text-[11px] uppercase tracking-widest">
-            Made in Sri Lanka
-          </p>
+          <nav
+            aria-label="Footer"
+            className="flex flex-wrap items-center gap-x-5 gap-y-2"
+          >
+            <Link href="/privacy" className="hover:text-white">
+              Privacy
+            </Link>
+            <Link href="/terms" className="hover:text-white">
+              Terms
+            </Link>
+            <a
+              href={SITE.social.instagram}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="hover:text-white"
+            >
+              Instagram
+            </a>
+            <span className="font-mono text-[11px] uppercase tracking-widest">
+              Made in Sri Lanka
+            </span>
+          </nav>
         </div>
       </div>
     </footer>

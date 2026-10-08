@@ -1,8 +1,11 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Geist, Instrument_Serif, Space_Mono } from "next/font/google";
 import "./globals.css";
+import AnalyticsInit from "@/components/analytics/analytics-init";
 import Topbar from "@/components/layout/topbar";
 import MotionProvider from "@/components/motion-provider";
+import { JsonLd, siteJsonLd } from "@/components/seo/json-ld";
+import { SITE } from "@/lib/site";
 import { cn } from "@/lib/utils";
 
 const geistSans = Geist({
@@ -29,12 +32,47 @@ const spaceMono = Space_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "Gratitude | Rewards at the places you love",
-  description:
-    "Give your number at the counter and earn at every Gratitude brand. One Pass for all your rewards, and loyalty programs brands can launch in minutes.",
-  icons: {
-    icon: { url: "/gratitude-white.svg", type: "image/svg+xml" },
+  metadataBase: new URL(SITE.url),
+  title: {
+    default: SITE.title,
+    template: `%s | ${SITE.name}`,
   },
+  description: SITE.description,
+  applicationName: SITE.name,
+  keywords: [...SITE.keywords],
+  authors: [{ name: SITE.company }],
+  creator: SITE.company,
+  publisher: SITE.company,
+  alternates: { canonical: "/" },
+  openGraph: {
+    type: "website",
+    url: "/",
+    siteName: SITE.name,
+    title: SITE.title,
+    description: SITE.description,
+    locale: SITE.locale,
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: SITE.title,
+    description: SITE.description,
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
+  },
+  formatDetection: { telephone: false },
+};
+
+export const viewport: Viewport = {
+  themeColor: "#fafafa",
 };
 
 export default function RootLayout({
@@ -54,6 +92,8 @@ export default function RootLayout({
       )}
     >
       <body className="flex min-h-screen h-full flex-col font-sans">
+        <JsonLd data={siteJsonLd} />
+        <AnalyticsInit />
         <MotionProvider>
           <Topbar />
           <main className="flex min-h-0 flex-1 flex-col">{children}</main>

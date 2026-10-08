@@ -1,0 +1,24 @@
+# Gratitude
+
+> Gratitude is a loyalty rewards platform in Sri Lanka, made by x2o Life. People who shop give their phone number at the counter of any Gratitude partner and earn stamps, points and treats, all kept together in one free Pass. Businesses such as cafés, bakeries, restaurants, salons and gyms use Gratitude to launch loyalty campaigns in minutes, with no cards to print and no app customers must download first.
+
+Gratitude is currently taking sign-ups for early access.
+
+## For people who shop
+
+- Free to use. No app needed to start earning: give your number at a partner shop.
+- One Pass shows every reward from every brand, closest rewards first, with reminders before anything expires.
+- Each brand sees only your visits with that brand. SMS is used only for sign-in codes, never for promotions.
+
+## For businesses
+
+- Ready-made campaigns: stamp cards, visit rewards, points, spend-and-get vouchers, happy hours, birthday and first-purchase offers.
+- Staff enter the customer's number and the bill amount, check a preview and confirm; Gratitude works out every stamp, point and discount.
+- Track how each campaign performs.
+
+## Links
+
+- [Website](https://www.staygrateful.life/): overview, FAQ and early-access waitlist
+- [Privacy Policy](https://www.staygrateful.life/privacy)
+- [Terms of Use](https://www.staygrateful.life/terms)
+- [Instagram](https://www.instagram.com/staygrateful.life/)

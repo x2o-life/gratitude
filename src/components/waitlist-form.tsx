@@ -14,6 +14,7 @@ import {
   FieldLabel,
 } from "@/components/ui/field";
 import { Input } from "@/components/ui/input";
+import { track } from "@/lib/analytics";
 import { submitWaitlistEntry } from "@/lib/firebase/waitlist";
 import { cn } from "@/lib/utils";
 import {
@@ -141,10 +142,13 @@ function BrandWaitlistForm({ onSuccess }: WaitlistFormProps) {
 
     try {
       await submitWaitlistEntry("brand", data);
+      // GA4 recommended lead event; mark generate_lead as a key event in GA.
+      track("generate_lead", { audience: "brand", lead_source: "waitlist" });
       form.reset();
       onSuccess();
     } catch (error) {
       console.error("Waitlist submission failed", error);
+      track("waitlist_error", { audience: "brand" });
       setSubmitError("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -280,10 +284,13 @@ function ConsumerWaitlistForm({ onSuccess }: WaitlistFormProps) {
 
     try {
       await submitWaitlistEntry("consumer", data);
+      // GA4 recommended lead event; mark generate_lead as a key event in GA.
+      track("generate_lead", { audience: "consumer", lead_source: "waitlist" });
       form.reset();
       onSuccess();
     } catch (error) {
       console.error("Waitlist submission failed", error);
+      track("waitlist_error", { audience: "consumer" });
       setSubmitError("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);

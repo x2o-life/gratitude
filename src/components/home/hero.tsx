@@ -2,6 +2,7 @@
 
 import { ArrowDown, Store } from "lucide-react";
 import Image from "next/image";
+import { track } from "@/lib/analytics";
 import { DotBackdrop, MonoLabel, PillButton, SerifTitle } from "./kit";
 
 /** A quiet opening: the promise, and a door for each audience. */
@@ -36,22 +37,27 @@ export default function Hero() {
           <PillButton
             accent="var(--pass)"
             icon={<ArrowDown />}
-            onClick={() =>
+            onClick={() => {
+              track("select_audience", {
+                audience: "consumer",
+                location: "hero",
+              });
               document
                 .getElementById("for-you")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
           >
             I shop
           </PillButton>
           <PillButton
             accent="var(--studio)"
             icon={<Store />}
-            onClick={() =>
+            onClick={() => {
+              track("select_audience", { audience: "brand", location: "hero" });
               document
                 .getElementById("for-brands")
-                ?.scrollIntoView({ behavior: "smooth" })
-            }
+                ?.scrollIntoView({ behavior: "smooth" });
+            }}
           >
             I run a business
           </PillButton>
