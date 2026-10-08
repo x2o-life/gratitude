@@ -143,7 +143,8 @@ function BrandWaitlistForm({ onSuccess }: WaitlistFormProps) {
       await submitWaitlistEntry("brand", data);
       form.reset();
       onSuccess();
-    } catch {
+    } catch (error) {
+      console.error("Waitlist submission failed", error);
       setSubmitError("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
@@ -281,7 +282,8 @@ function ConsumerWaitlistForm({ onSuccess }: WaitlistFormProps) {
       await submitWaitlistEntry("consumer", data);
       form.reset();
       onSuccess();
-    } catch {
+    } catch (error) {
+      console.error("Waitlist submission failed", error);
       setSubmitError("Something went wrong. Please try again.");
     } finally {
       setIsSubmitting(false);
